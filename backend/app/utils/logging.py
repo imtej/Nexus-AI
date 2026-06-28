@@ -1,5 +1,5 @@
 """
-Sapti AI — Structured Logging Setup
+Nexus AI — Structured Logging Setup
 """
 
 import structlog

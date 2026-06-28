@@ -1,5 +1,5 @@
 """
-Sapti AI — Conversation Data Models
+Nexus AI — Conversation Data Models
 """
 
 from pydantic import BaseModel, Field
@@ -24,7 +24,7 @@ class MessageCreate(BaseModel):
 
 
 class Conversation(BaseModel):
-    """A conversation between user and Sapti."""
+    """A conversation between user and Nexus AI."""
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     user_id: str
     title: Optional[str] = None

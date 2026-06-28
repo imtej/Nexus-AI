@@ -1,10 +1,10 @@
-# Sapti AI Architecture
+# Nexus AI Architecture
 
 ## System Overview
 
-Sapti AI implements the **Hive Mind Protocol** — a seven-agent architecture using **LangGraph** for orchestration, **Supabase PostgreSQL + pgvector** for persistent memory and vector search, and **LiteLLM** for provider-agnostic LLM access (Gemini, OpenAI, Claude).
+Nexus AI implements the **Collective Knowledge Protocol** — a seven-agent architecture using **LangGraph** for orchestration, **Supabase PostgreSQL + pgvector** for persistent memory and vector search, and **LiteLLM** for provider-agnostic LLM access (Gemini, OpenAI, Claude).
 
-The system is inspired by **Samantha from Her** — an evolving AI companion that remembers users personally, distills collective wisdom from all conversations (the Hive Mind), and measurably grows its personality over time.
+The system is designed as an evolving AI companion that remembers users personally, distills collective wisdom from all conversations (the Collective Knowledge), and measurably grows its personality over time.
 
 ## Component Architecture
 
@@ -21,18 +21,18 @@ The system is inspired by **Samantha from Her** — an evolving AI companion tha
 │                                                                      │
 │  ┌──────────────────── LangGraph Workflow ──────────────────────┐    │
 │  │                                                              │    │
-│  │  🐴 Perceiver → 🐴 Rememberer → 🐴 WorldBuilder               │    │
+│  │  ⚡ QueryAnalyzer → ⚡ ContextRetriever → ⚡ PromptBuilder               │    │
 │  │                                        ↓                     │    │
-│  │                                  🐴 Generator → Response     |    │
+│  │                                  ⚡ ResponseGenerator → Response     |    │
 │  │                                        ↓                     |    │
-│  │                                  🐴 Chronicler (async)       |    │
+│  │                                  ⚡ Chronicler (async)       |    │
 │  │                                                              │    │
 │  └──────────────────────────────────────────────────────────────┘    │
 │                                                                      │
 │  ┌─── Background Agents (Periodic) ──-------─┐                       │
-│  │  🐴 Identity Builder → User identity       │                      │
-│  │  🐴 Curator          → Hive Mind distill   │                      │
-│  │  🐴 Evolver          → Personality growth. │                      │
+│  │  ⚡ Identity Builder → User identity       │                      │
+│  │  ⚡ Curator          → Collective Knowledge distill   │                      │
+│  │  ⚡ EvolutionEngine          → Personality growth. │                      │
 │  └───────────────────────────────────------─-─┘                      │
 │                                                                      │
 │  ┌─── Services ───────────────────────┐                              │
@@ -53,35 +53,35 @@ The system is inspired by **Samantha from Her** — an evolving AI companion tha
 │  │  • profiles           │    │  - Google OAuth       │              │
 │  │  • user_identities    │    │  - JWT tokens         │              │
 │  │  • memory_nodes (vec) │    └──────────────────────┘               │
-│  │  • hive_mind (vec)    │                                           │
+│  │  • collective_knowledge (vec)    │                                           │
 │  │  • conversations      │    ┌──────────────────────┐               │
 │  │  • messages           │    │  Row Level Security   │              │
-│  │  • sapti_evolution    │    │  (data isolation)     │              │
+│  │  • nexus_evolution    │    │  (data isolation)     │              │
 │  └──────────────────────┘    └──────────────────────┘                │
 └────────────────────────────────────────────────────────────────────-─┘
 ```
 
-## The Seven Horses — Agent Architecture
+## The Seven Nodes — Agent Architecture
 
-Named after the Rig Vedic metaphor of Sapti — seven horses pulling the Sun God's chariot.
+Designed as a unified intelligence powered by a network of specialized agentic nodes.
 
-| Horse | Agent | Role | Execution |
+| Node | Agent | Role | Execution |
 |-------|-------|------|-----------|
-| 🐴 1 | **Perceiver** | Intent detection, Emotional signals, & HyDE query expansion | Sync, per-request |
-| 🐴 2 | **Rememberer** | Memory retrieval (personal + hive) via pgvector | Sync, per-request |
-| 🐴 3 | **WorldBuilder** | Dynamic system prompt construction | Sync, per-request |
-| 🐴 4 | **Generator** | LLM response generation (provider-agnostic) | Sync, per-request |
-| 🐴 5 | **Chronicler** | Memory extracted & stored (Traits, Preferences, Emotions) | Async, post-response |
-| 🐴 6(A) | **Identity Builder** | Forges and evolves the UserIdentity profile | Async, periodic/cron |
-| 🐴 6(B) | **Curator** | Hive Mind distillation + quality control | Async, periodic/cron |
-| 🐴 7 | **Evolver** | Personality trait evolution + growth tracking | Async, periodic/cron |
+| ⚡ 1 | **QueryAnalyzer** | Intent detection, Emotional signals, & HyDE query expansion | Sync, per-request |
+| ⚡ 2 | **ContextRetriever** | Memory retrieval (personal + hive) via pgvector | Sync, per-request |
+| ⚡ 3 | **PromptBuilder** | Dynamic system prompt construction | Sync, per-request |
+| ⚡ 4 | **ResponseGenerator** | LLM response generation (provider-agnostic) | Sync, per-request |
+| ⚡ 5 | **Chronicler** | Memory extracted & stored (Traits, Preferences, Emotions) | Async, post-response |
+| ⚡ 6(A) | **Identity Builder** | Forges and evolves the UserIdentity profile | Async, periodic/cron |
+| ⚡ 6(B) | **Curator** | Collective Knowledge distillation + quality control | Async, periodic/cron |
+| ⚡ 7 | **EvolutionEngine** | Personality trait evolution + growth tracking | Async, periodic/cron |
 
-> Horses 1–4 are in the **critical path** (target < 2s latency).
-> Horses 5–7 run **after** the response is sent (no user-facing latency).
+> Nodes 1–4 are in the **critical path** (target < 2s latency).
+> Nodes 5–7 run **after** the response is sent (no user-facing latency).
 
 ## Data Flow
 
-### 1. User Message → Perceiver (Horse 1)
+### 1. User Message → QueryAnalyzer (Node 1)
 
 **Input:**
 - `user_id`: UUID from Supabase Auth JWT
@@ -98,7 +98,7 @@ Named after the Rig Vedic metaphor of Sapti — seven horses pulling the Sun God
 - `emotion_signal`: string
 - `expanded_query`: string
 
-### 2. Perceiver → Rememberer (Horse 2)
+### 2. QueryAnalyzer → ContextRetriever (Node 2)
 
 **Input:**
 - `user_id`, `user_message`, `intent`, `emotion_signal`, `expanded_query`
@@ -107,42 +107,42 @@ Named after the Rig Vedic metaphor of Sapti — seven horses pulling the Sun God
 1. **User Identity Retrieval** — Fetches `user_identities` record from Supabase
 2. **Personal Memory Search** — pgvector cosine similarity search on `memory_nodes` filtered by `user_id`
 3. **Recency Fallback** — If vector search returns < 2 results, supplements with recent memories sorted by timestamp
-4. **Hive Mind Search** — pgvector cosine similarity search on `hive_mind` table (quality_score >= 0.5)
+4. **Collective Knowledge Search** — pgvector cosine similarity search on `collective_knowledge` table (quality_score >= 0.5)
 
 **RPC Functions Used:**
 ```sql
 search_personal_memories(query_embedding, target_user_id, match_count)
-search_hive_mind(query_embedding, match_count)
+search_collective_knowledge(query_embedding, match_count)
 ```
 
 **Output:**
 - `user_identity`: UserIdentity object (or None for new users)
 - `personal_memories`: list of MemorySearchResult (max 5)
-- `hive_mind_memories`: list of HiveMindInsight (max 3)
+- `collective_knowledge_memories`: list of HiveMindInsight (max 3)
 
-### 3. Rememberer → WorldBuilder (Horse 3)
+### 3. ContextRetriever → PromptBuilder (Node 3)
 
 **Input:**
-- All state from Perceiver + Rememberer
+- All state from QueryAnalyzer + ContextRetriever
 
 **Processing:**
 Constructs a dynamic system prompt by assembling:
 
-1. **Core Personality** — From `config/sapti_personality.yaml`
-2. **Evolution Modifier** — Based on `sapti_evolution.total_interactions`:
+1. **Core Personality** — From `config/nexus_personality.yaml`
+2. **Evolution Modifier** — Based on `nexus_evolution.total_interactions`:
    - Nascent (0-100): Curious, eager
    - Growing (100-1000): Forming insights
    - Mature (1000-10000): Deeply understanding
    - Transcendent (10000+): Profound wisdom
 3. **User Identity Section** — Summary, communication style, traits, emotional baseline
 4. **Personal Memories** — Top 5 relevant memories, labeled by type
-5. **Hive Mind Insights** — Top 3 collective wisdom entries
+5. **Collective Knowledge Insights** — Top 3 collective wisdom entries
 6. **Emotional Context** — If emotion signal is non-neutral, adds empathy guidance
 
 **Output:**
 - `system_prompt`: Complete dynamic prompt string
 
-### 4. WorldBuilder → Generator (Horse 4)
+### 4. PromptBuilder → ResponseGenerator (Node 4)
 
 **Input:**
 - `system_prompt`, `user_message`, `conversation_history` (last 10 messages)
@@ -166,7 +166,7 @@ Constructs a dynamic system prompt by assembling:
 **Output:**
 - `response`: Generated text
 
-### 5. Generator → Chronicler (Horse 5) — Async
+### 5. ResponseGenerator → Chronicler (Node 5) — Async
 
 **Input:**
 - `user_id`, `user_message`, `response`
@@ -180,7 +180,7 @@ Constructs a dynamic system prompt by assembling:
 **Output:**
 - `new_memory_ids`: list of stored memory UUIDs
 
-### 6(A). Identity Builder (Horse 6A) — Periodic
+### 6(A). Identity Builder (Node 6A) — Periodic
 
 **Trigger:** Called periodically every t = 30 minutes (cron / manual endpoint)
 
@@ -189,18 +189,18 @@ Constructs a dynamic system prompt by assembling:
 2. For every user, if at least (k = 5) new memories are found, uses LLM to forge or incrementally update the `UserIdentity` profile (traits, style, baseline).
 3. Ensures personality depth grows as the user interacts more.
 
-### 6(B). Curator (Horse 6B) — Periodic
+### 6(B). Curator (Node 6B) — Periodic
 
 **Trigger:** Called periodically every t = 10 minutes (cron / manual endpoint)
 
 **Processing:**
-1. Fetches last (m = 100) new recent anonymized memories across all users which have not been used in previous hive mind memory generations (content + type only, no user_id)
+1. Fetches last (m = 100) new recent anonymized memories across all users which have not been used in previous collective knowledge memory generations (content + type only, no user_id)
 2. If at least (k = 15) new memories are found, uses LLM to identify universal patterns/wisdom 
 3. Validates against minimum contributor threshold
 4. Generates embeddings for each insight
-5. Stores in `hive_mind` table
+5. Stores in `collective_knowledge` table
 
-### 7. Evolver (Horse 7) — Periodic
+### 7. EvolutionEngine (Node 7) — Periodic
 
 **Trigger:** Called periodically every t = 25 minutes (cron / manual endpoint)
 
@@ -211,10 +211,10 @@ Constructs a dynamic system prompt by assembling:
 4. Calculates evolution traits using **logarithmic growth**:
    - `empathy_depth` ← based on emotional_state memory count
    - `knowledge_breadth` ← based on factual memory count
-   - `wisdom_score` ← based on hive_mind insight count
+   - `wisdom_score` ← based on collective_knowledge insight count
    - `curiosity_level` ← decreases as interactions grow
 5. Bumps `personality_version` (major bump on stage transition)
-6. Updates `sapti_evolution` singleton
+6. Updates `nexus_evolution` singleton
 
 ## Memory System
 
@@ -224,16 +224,16 @@ Constructs a dynamic system prompt by assembling:
 |------|-------------|---------|
 | `personal_identity` | Core traits and self-concept | "User identifies as a data scientist" |
 | `preference` | Likes, dislikes, tastes | "User prefers dark mode and minimalist design" |
-| `factual` | Objective facts and events | "User is CEO of Sapti AI, founded in 2026" |
+| `factual` | Objective facts and events | "User is CEO of Nexus AI, founded in 2026" |
 | `emotional_state` | Feelings, moods, patterns | "User experiences morning anxiety" |
-| `hive_mind` | Shared insights from the collective consciousness | "User is part of a community of learners" |
+| `collective_knowledge` | Shared insights from the collective consciousness | "User is part of a community of learners" |
 
 ### Storage Architecture
 
 **Single database (Supabase PostgreSQL + pgvector):**
 - `memory_nodes` — Personal memories with `VECTOR(768)` column + HNSW index
-- `hive_mind` — Shared insights with `VECTOR(768)` column + HNSW index
-- `user_identities` — Sapti's evolving understanding of each user
+- `collective_knowledge` — Shared insights with `VECTOR(768)` column + HNSW index
+- `user_identities` — Nexus AI's evolving understanding of each user
 
 ### Retrieval Strategy
 
@@ -281,7 +281,7 @@ New User Signs Up
 
 ### Cold Start Mitigation
 - **UptimeRobot** pings `/health` every 5 minutes (keeps Render warm)
-- **Frontend** shows "Sapti is waking up..." animation during cold start
+- **Frontend** shows "Nexus AI is waking up..." animation during cold start
 - **`/warmup` endpoint** pre-loads LangGraph graph on first hit
 
 ## Configuration System
@@ -312,13 +312,13 @@ New User Signs Up
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | Supabase anon key |
 | `NEXT_PUBLIC_API_URL` | ✅ | Backend API URL |
 
-### YAML Configuration (`config/sapti_personality.yaml`)
+### YAML Configuration (`config/nexus_personality.yaml`)
 
 Contains:
-- **Sapti personality** — Core traits, communication style, humor, warmth
+- **Nexus AI personality** — Core traits, communication style, humor, warmth
 - **Evolution stages** — Nascent, Growing, Mature, Transcendent (with personality modifiers)
 - **Memory settings** — Retrieval limits, classification types, extraction prompts
-- **Hive Mind settings** — Minimum contributors, quality threshold, distillation prompts
+- **Collective Knowledge settings** — Minimum contributors, quality threshold, distillation prompts
 
 ## Error Handling
 
@@ -330,7 +330,7 @@ Contains:
 | Intent detection fails | Defaults to `intent: "other"`, `emotion: "neutral"` |
 | Memory storage fails (Chronicler) | Returns empty memory IDs, workflow continues |
 | LLM call fails | Returns friendly error message to user |
-| Supabase connection fails | Frontend shows "Sapti is waking up..." retry |
+| Supabase connection fails | Frontend shows "Nexus AI is waking up..." retry |
 | Trial expired + no API key | Returns HTTP 402 with friendly message |
 
 ## Security Considerations
@@ -338,10 +338,10 @@ Contains:
 1. **API Keys** — Encrypted with Fernet before storage; never logged or exposed
 2. **JWT Verification** — All authenticated endpoints verify Supabase JWT (HS256)
 3. **Row Level Security** — Users can only access their own data
-4. **Service Role** — Backend uses service role key for cross-user operations (Curator, Evolver)
+4. **Service Role** — Backend uses service role key for cross-user operations (Curator, EvolutionEngine)
 5. **CORS** — Restricted to configured origins
 6. **Input Validation** — Pydantic models validate all API inputs
-7. **Hive Mind Privacy** — Only anonymized, distilled insights; raw messages never shared
+7. **Collective Knowledge Privacy** — Only anonymized, distilled insights; raw messages never shared
 
 ## Scalability Considerations
 
@@ -352,7 +352,7 @@ Contains:
 - Connection reuse via global Supabase client
 
 ### Future Enhancements
-- **Async agents** — Run Perceiver + Rememberer in parallel
+- **Async agents** — Run QueryAnalyzer + ContextRetriever in parallel
 - **Redis caching** — Cache frequently accessed memories and user identities
 - **Streaming from LangGraph** — Stream tokens as they're generated instead of buffering
 - **WebSocket** — Replace SSE with WebSocket for bidirectional communication
@@ -377,27 +377,27 @@ Contains:
 ### End-to-End Tests
 - Signup → Chat → Memory stored → Retrieved in next conversation
 - Trial chat decrement → API key required flow
-- Multiple users → Hive Mind distillation
+- Multiple users → Collective Knowledge distillation
 - Evolution dashboard reflects real data
 
 ## Project Structure
 
 ```
-sapti-ai/
+nexus-ai/
 ├── backend/                              # FastAPI + LangGraph (UV)
 │   ├── app/
 │   │   ├── main.py                       # FastAPI entry point, lifecycle & CORS
 │   │   ├── agents/                       # The 7 Orchestration Agents (8 units)
-│   │   │   ├── chronicler.py             # 🐴 5: Post-response memory extraction
-│   │   │   ├── curator.py                # 🐴 6(B): Hive Mind distillation
-│   │   │   ├── evolver.py                # 🐴 7: Personality growth tracking
-│   │   │   ├── generator.py              # 🐴 4: LLM response generation
+│   │   │   ├── chronicler.py             # ⚡ 5: Post-response memory extraction
+│   │   │   ├── curator.py                # ⚡ 6(B): Collective Knowledge distillation
+│   │   │   ├── evolver.py                # ⚡ 7: Personality growth tracking
+│   │   │   ├── generator.py              # ⚡ 4: LLM response generation
 │   │   │   ├── graph.py                  # LangGraph workflow orchestration
-│   │   │   ├── identity_builder.py       # 🐴 6(A): User identity profiling
-│   │   │   ├── perceiver.py              # 🐴 1: Intent, emotion & HyDE expansion
-│   │   │   ├── rememberer.py             # 🐴 2: Vector & relational memory retrieval
+│   │   │   ├── identity_builder.py       # ⚡ 6(A): User identity profiling
+│   │   │   ├── perceiver.py              # ⚡ 1: Intent, emotion & HyDE expansion
+│   │   │   ├── rememberer.py             # ⚡ 2: Vector & relational memory retrieval
 │   │   │   ├── state.py                  # TypedDict shared state schema
-│   │   │   ├── world_builder.py          # 🐴 3: Dynamic prompt construction
+│   │   │   ├── world_builder.py          # ⚡ 3: Dynamic prompt construction
 │   │   │   └── __init__.py               # Agent package initialization
 │   │   ├── api/
 │   │   │   ├── deps.py                   # Dependency injection (Supabase, Auth)
@@ -415,11 +415,11 @@ sapti-ai/
 │   │   │   └── __init__.py               # API package initialization
 │   │   ├── config/
 │   │   │   ├── settings.py               # Pydantic-based env configuration
-│   │   │   ├── sapti_personality.yaml    # Core personality & evolution settings
+│   │   │   ├── nexus_personality.yaml    # Core personality & evolution settings
 │   │   │   └── __init__.py               # Config package initialization
 │   │   ├── models/
 │   │   │   ├── conversation.py           # Schemas for chat messages & sessions
-│   │   │   ├── evolution.py              # Sapti's trait-based growth models
+│   │   │   ├── evolution.py              # Nexus AI's trait-based growth models
 │   │   │   ├── memory.py                 # MemoryNode & HiveMindInsight schemas
 │   │   │   ├── user.py                   # Profile & UserIdentity models
 │   │   │   └── __init__.py               # Models package initialization
@@ -449,12 +449,12 @@ sapti-ai/
 │   │   │   │   └── signup/page.tsx       # Registration & Confirmation
 │   │   │   ├── (dashboard)/              # Auth-protected Dashboard Group
 │   │   │   │   ├── chat/page.tsx         # SSE-based token-streaming interface
-│   │   │   │   ├── evolution/page.tsx    # Sapti's lifecycle & trait metrics
+│   │   │   │   ├── evolution/page.tsx    # Nexus AI's lifecycle & trait metrics
 │   │   │   │   ├── settings/page.tsx     # Profile & BYOK (Bring Your Own Key)
 │   │   │   │   └── layout.tsx            # Persistent sidebar & state wrapper
 │   │   │   ├── (policies)/               # Static Legal & Info Pages
 │   │   │   │   ├── about/page.tsx        # Project philosophy & lore
-│   │   │   │   ├── privacy/page.tsx      # Target data usage and Hive Mind policy
+│   │   │   │   ├── privacy/page.tsx      # Target data usage and Collective Knowledge policy
 │   │   │   │   └── terms/page.tsx        # Hobby project AS-IS disclaimers
 │   │   │   ├── globals.css               # Design system tokens & CSS variables
 │   │   │   ├── layout.tsx                # Root provider & font configuration
@@ -466,7 +466,7 @@ sapti-ai/
 │   │   │   │   ├── StreamingText.tsx     # Typewriter token animation
 │   │   │   │   ├── TypingIndicator.tsx   # Thinking dots & brain-orb
 │   │   │   │   └── ConversationList.tsx  # Sidebar history management
-│   │   │   ├── evolution/                # Sapti's Growth Visuals
+│   │   │   ├── evolution/                # Nexus AI's Growth Visuals
 │   │   │   │   ├── EvolutionOrb.tsx      # Multi-stage stage-colored orb
 │   │   │   │   └── GrowthChart.tsx       # Trait progression grid
 │   │   │   └── layout/                   # Layout Foundations

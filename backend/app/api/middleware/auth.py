@@ -1,5 +1,5 @@
 """
-Sapti AI — Auth Middleware
+Nexus AI — Auth Middleware
 Verifies Supabase JWT tokens from the Authorization header.
 """
 

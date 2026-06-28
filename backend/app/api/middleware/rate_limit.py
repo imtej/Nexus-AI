@@ -1,5 +1,5 @@
 """
-Sapti AI — Rate Limiting Middleware
+Nexus AI — Rate Limiting Middleware
 Simple in-memory rate limiter for API endpoints.
 """
 

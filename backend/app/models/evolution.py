@@ -1,5 +1,5 @@
 """
-Sapti AI — Evolution Data Models
+Nexus AI — Evolution Data Models
 """
 
 from pydantic import BaseModel, Field
@@ -7,8 +7,8 @@ from typing import Optional
 from datetime import datetime
 
 
-class SaptiEvolution(BaseModel):
-    """Sapti's global evolution state (singleton)."""
+class SystemEvolution(BaseModel):
+    """System's global evolution state (singleton)."""
     id: int = 1
     personality_version: str = "1.0.0"
     total_interactions: int = 0

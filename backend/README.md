@@ -1,25 +1,25 @@
-# Sapti AI Backend
+# Nexus AI Backend
 
-The backend for Sapti AI is a production-grade orchestration layer built heavily on **FastAPI**, **LangGraph**, and **Supabase (pgvector)**. It employs a **"Seven Horses" (Agent) Architecture** to execute Sapti's evolving cognitive behaviors, intent detection, dynamic prompting, and the global Hive Mind distillation processes.
+The backend for Nexus AI is a production-grade orchestration layer built heavily on **FastAPI**, **LangGraph**, and **Supabase (pgvector)**. It employs an **"Agentic Nodes" Architecture** to execute Nexus AI's evolving cognitive behaviors, intent detection, dynamic prompting, and the global Collective Knowledge distillation processes.
 
 It uses **UV** as the ultrafast Python package and project manager, and relies on **LiteLLM** to remain 100% provider-agnostic, supporting Gemini, OpenAI, and Anthropic seamlessly.
 
 ---
 
-## 🏗 System Architecture (The Seven Horses)
+## 🏗 System Architecture (The Agentic Nodes)
 
-The Sapti Backend operates through 7 distinct AI agents named after the Rig Vedic metaphor of the seven horses pulling the sun chariot.
+The Nexus AI Backend operates through 7 distinct AI agent nodes.
 
-| Horse | Agent | Role | Execution |
+| Node | Agent | Role | Execution |
 |-------|-------|------|-----------|
-| 🐴 1 | **Perceiver** | Intent detection, Emotional signals, & HyDE query expansion | Sync, critical path |
-| 🐴 2 | **Rememberer** | Vector retrieval (Personal + Hive Mind) via pgvector | Sync, critical path |
-| 🐴 3 | **WorldBuilder** | Constructs the dynamic system prompt | Sync, critical path |
-| 🐴 4 | **Generator** | Streams LLM responses to the user | Sync, critical path |
-| 🐴 5 | **Chronicler** | Memory extracted & stored (Traits, Preferences, Emotions) | Async, post-response |
-| 🐴 6(A) | **Identity Builder** | Forges and evolves the UserIdentity profile | Periodic/cron background |
-| 🐴 6(B) | **Curator** | Distills shared wisdom into Hive Mind insights | Periodic/cron background |
-| 🐴 7 | **Evolver** | Calculates & updates Sapti's psychological growth | Periodic/cron background |
+| 🧠 1 | **QueryAnalyzer** | Intent detection, Emotional signals, & HyDE query expansion | Sync, critical path |
+| 🧠 2 | **ContextRetriever** | Vector retrieval (Personal + Collective Knowledge) via pgvector | Sync, critical path |
+| 🧠 3 | **PromptBuilder** | Constructs the dynamic system prompt | Sync, critical path |
+| 🧠 4 | **ResponseGenerator** | Streams LLM responses to the user | Sync, critical path |
+| 🧠 5 | **MemoryExtractor** | Memory extracted & stored (Traits, Preferences, Emotions) | Async, post-response |
+| 🧠 6(A) | **UserProfiler** | Forges and evolves the UserIdentity profile | Periodic/cron background |
+| 🧠 6(B) | **InsightDistiller** | Distills shared wisdom into Collective Knowledge insights | Periodic/cron background |
+| 🧠 7 | **EvolutionEngine** | Calculates & updates Nexus AI's psychological growth | Periodic/cron background |
 
 ---
 
@@ -100,16 +100,16 @@ backend/
 ├── app/
 │   ├── main.py                       # FastAPI entry point, lifecycle & CORS
 │   ├── agents/                       # The 7 Orchestration Agents (8 units)
-│   │   ├── chronicler.py             # 🐴 5: Post-response memory extraction
-│   │   ├── curator.py                # 🐴 6(B): Hive Mind distillation
-│   │   ├── evolver.py                # 🐴 7: Personality growth tracking
-│   │   ├── generator.py              # 🐴 4: LLM response generation
+│   │   ├── memory_extractor.py       # 🧠 5: Post-response memory extraction
+│   │   ├── insight_distiller.py      # 🧠 6(B): Collective Knowledge distillation
+│   │   ├── evolution_engine.py       # 🧠 7: Personality growth tracking
+│   │   ├── response_generator.py     # 🧠 4: LLM response generation
 │   │   ├── graph.py                  # LangGraph workflow orchestration
-│   │   ├── identity_builder.py       # 🐴 6(A): User identity profiling
-│   │   ├── perceiver.py              # 🐴 1: Intent, emotion & HyDE expansion
-│   │   ├── rememberer.py             # 🐴 2: Vector & relational memory retrieval
+│   │   ├── user_profiler.py          # 🧠 6(A): User identity profiling
+│   │   ├── query_analyzer.py         # 🧠 1: Intent, emotion & HyDE expansion
+│   │   ├── context_retriever.py      # 🧠 2: Vector & relational memory retrieval
 │   │   ├── state.py                  # TypedDict shared state schema
-│   │   ├── world_builder.py          # 🐴 3: Dynamic prompt construction
+│   │   ├── prompt_builder.py         # 🧠 3: Dynamic prompt construction
 │   │   └── __init__.py               # Agent package initialization
 │   ├── api/
 │   │   ├── deps.py                   # Dependency injection (Supabase, Auth)
@@ -127,12 +127,12 @@ backend/
 │   │   └── __init__.py               # API package initialization
 │   ├── config/
 │   │   ├── settings.py               # Pydantic-based env configuration
-│   │   ├── sapti_personality.yaml    # Core personality & evolution settings
+│   │   ├── system_personality.yaml   # Core personality & evolution settings
 │   │   └── __init__.py               # Config package initialization
 │   ├── models/
 │   │   ├── conversation.py           # Schemas for chat messages & sessions
-│   │   ├── evolution.py              # Sapti's trait-based growth models
-│   │   ├── memory.py                 # MemoryNode & HiveMindInsight schemas
+│   │   ├── evolution.py              # System's trait-based growth models
+│   │   ├── memory.py                 # MemoryNode & CollectiveKnowledgeInsight schemas
 │   │   ├── user.py                   # Profile & UserIdentity models
 │   │   └── __init__.py               # Models package initialization
 │   ├── services/
@@ -158,7 +158,7 @@ backend/
 
 ## 🔐 API Key Handling & Security
 
-Sapti handles a hybrid API key model securely:
+Nexus AI handles a hybrid API key model securely:
 1. **Developer Token (Subsidized):** New users utilize the `DEFAULT_LLM_API_KEY` for a limited amount of trial chats.
 2. **Bring Your Own Key (BYOK):** Once the trial is exhausted, users save their own API keys via the frontend.
 3. **Encryption at Rest:** All user-supplied API keys are symmetrically encrypted using Python's `cryptography.fernet` and stored as `encrypted_api_key`. They are safely decrypted into memory strictly at runtime.

@@ -1,13 +1,13 @@
 """
-Sapti AI — Evolution API Routes
-Public endpoints for Sapti's evolution stats.
+Nexus AI — Evolution API Routes
+Public endpoints for System's evolution stats.
 """
 
 import structlog
 from fastapi import APIRouter
 
 from app.services.supabase_client import get_supabase_admin
-from app.models.evolution import EvolutionStats, SaptiEvolution
+from app.models.evolution import EvolutionStats, SystemEvolution
 
 logger = structlog.get_logger()
 
@@ -16,11 +16,11 @@ router = APIRouter(prefix="/evolution", tags=["evolution"])
 
 @router.get("", response_model=EvolutionStats)
 async def get_evolution_stats():
-    """Get Sapti's current evolution stats. Public endpoint."""
+    """Get System's current evolution stats. Public endpoint."""
     db = get_supabase_admin()
 
     try:
-        result = db.table("sapti_evolution").select("*").eq("id", 1).single().execute()
+        result = db.table("system_evolution").select("*").eq("id", 1).single().execute()
 
         if not result.data:
             # Return default stats if not initialized
@@ -36,7 +36,7 @@ async def get_evolution_stats():
                 evolution_percentage=0.0,
             )
 
-        evolution = SaptiEvolution(**result.data)
+        evolution = SystemEvolution(**result.data)
 
         return EvolutionStats(
             personality_version=evolution.personality_version,

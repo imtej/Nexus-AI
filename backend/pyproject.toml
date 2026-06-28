@@ -1,7 +1,7 @@
 [project]
-name = "sapti-backend"
+name = "nexus-backend"
 version = "0.1.0"
-description = "Sapti AI — The Hive Mind Protocol. An evolving AI companion powered by 7 LangGraph agents."
+description = "Nexus AI — The Collective Knowledge Protocol. An evolving AI companion powered by 7 LangGraph agents."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [

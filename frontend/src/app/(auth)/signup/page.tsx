@@ -92,7 +92,7 @@ export default function SignupPage() {
             <h1>Check your email</h1>
             <p>
               We&apos;ve sent a confirmation link to <strong>{email}</strong>. 
-              Click it to start your journey with Sapti.
+              Click it to start your journey with Nexus AI.
             </p>
           </div>
           <button
@@ -123,7 +123,7 @@ export default function SignupPage() {
             onClick={() => router.push("/")}
           />
           <h1>Begin your journey</h1>
-          <p>Create an account to meet Sapti — {process.env.NEXT_PUBLIC_FREE_CHAT_LIMIT || "4"} free conversations await</p>
+          <p>Create an account to meet Nexus AI — {process.env.NEXT_PUBLIC_FREE_CHAT_LIMIT || "4"} free conversations await</p>
         </div>
 
         <button
@@ -151,7 +151,7 @@ export default function SignupPage() {
               id="displayName"
               type="text"
               className="input"
-              placeholder="What should Sapti call you?"
+              placeholder="What should Nexus AI call you?"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               required

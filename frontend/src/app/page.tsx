@@ -53,7 +53,7 @@ export default function LandingPage() {
       <header className={styles.header}>
         <div className={styles.logo}>
           <div className={styles.logoOrb} />
-          <span className={styles.logoText}>Sapti</span>
+          <span className={styles.logoText}>Nexus AI</span>
         </div>
         <nav className={styles.nav}>
           <button
@@ -80,13 +80,13 @@ export default function LandingPage() {
         </div>
 
         <h1 className={styles.heroTitle}>
-          Meet <span className="text-gradient">Sapti</span>
+          Meet <span className="text-gradient">Nexus AI</span>
         </h1>
 
         <p className={styles.heroSubtitle}>
           An AI that{" "}
           <span className={styles.highlight}>evolves</span> with every
-          conversation. Powered by the <span className={styles.highlight}>Hive Mind</span> Protocol — collective
+          conversation. Powered by the <span className={styles.highlight}>Collective Knowledge</span> Protocol — collective
           intelligence, personal memory, genuine connection.
         </p>
 
@@ -103,7 +103,7 @@ export default function LandingPage() {
             Start Chatting — It&apos;s Free
           </button>
           <p className={styles.ctaNote}>
-            {process.env.NEXT_PUBLIC_FREE_CHAT_LIMIT || "4"} free conversations, no credit card or API Key needed
+            1000 free conversations, no credit card or API Key needed
           </p>
         </div>
 
@@ -141,7 +141,7 @@ export default function LandingPage() {
           <div className={styles.featureIcon}>🧬</div>
           <h3>Evolving Intelligence</h3>
           <p>
-            Sapti grows wiser with every conversation across all users. Watch
+            Nexus AI grows wiser with every conversation across all users. Watch
             its personality evolve in real-time.
           </p>
         </div>
@@ -149,16 +149,16 @@ export default function LandingPage() {
           <div className={styles.featureIcon}>🧠</div>
           <h3>Personal Memory</h3>
           <p>
-            Sapti remembers you — your preferences, your stories, what
+            Nexus AI remembers you — your preferences, your stories, what
             matters to you. Like a friend who truly listens.
           </p>
         </div>
         <div className={styles.featureCard}>
-          <div className={styles.featureIcon}>🐴</div>
-          <h3>Seven Horses</h3>
+          <div className={styles.featureIcon}>⚡</div>
+          <h3>Agentic Nodes</h3>
           <p>
-            7 specialized AI agents work in harmony — perceiving, remembering,
-            building worlds, generating, and chronicling.
+            A network of specialized AI agents work in harmony — analyzing queries, retrieving context,
+            building prompts, generating responses, and extracting memory.
           </p>
         </div>
       </section>
@@ -167,15 +167,15 @@ export default function LandingPage() {
       <footer className={styles.footer}>
         <div className={styles.footerContent}>
           <div className={styles.footerColumn}>
-            <h4><span className="text-gradient">Sapti AI</span></h4>
+            <h4><span className="text-gradient">Nexus AI</span></h4>
             <p>
-              Named after the <span style={{ color: "var(--accent-primary)" }}>seven horses</span> of the <span style={{ color: "var(--accent-primary)" }}>Rig Veda</span> — An experiment in evolving intelligence powered by the <span style={{ color: "var(--accent-primary)" }}>Hive Mind</span> Protocol, and inspired by Samantha from <span style={{ color: "var(--accent-primary)" }}>Her</span>.
+              Designed as a unified intelligence powered by a network of specialized <span style={{ color: "var(--accent-primary)" }}>agentic nodes</span> — An experiment in evolving intelligence powered by the <span style={{ color: "var(--accent-primary)" }}>Collective Knowledge</span> Protocol.
             </p>
           </div>
           <div className={styles.footerColumn}>
             <h4>Project</h4>
-            <Link href="/about" className={styles.footerLink}>About Sapti</Link>
-            <Link href="https://github.com/imtej/Sapti_AI" className={styles.footerLink} target="_blank" rel="noopener noreferrer">GitHub Repository</Link>
+            <Link href="/about" className={styles.footerLink}>About Nexus AI</Link>
+            <Link href="https://github.com/imtej/Nexus AI_AI" className={styles.footerLink} target="_blank" rel="noopener noreferrer">GitHub Repository</Link>
           </div>
           <div className={styles.footerColumn}>
             <h4>Legal & Transparency</h4>
@@ -185,7 +185,7 @@ export default function LandingPage() {
         </div>
 
         <div className={styles.footerBottom}>
-          <p>© {new Date().getFullYear()} Sapti AI: Named after the seven horses of the Rig Veda</p>
+          <p>© {new Date().getFullYear()} Nexus AI: The Collective Knowledge Protocol</p>
         </div>
       </footer>
     </div>

@@ -337,7 +337,7 @@ export default function ChatPage() {
     return (
       <div className={styles.wakingContainer}>
         <div className={styles.wakingOrb} />
-        <h2>Sapti is waking up...</h2>
+        <h2>Nexus AI is waking up...</h2>
         <p className="text-secondary">
           First visit takes a moment. Just a few more seconds.
         </p>
@@ -352,7 +352,7 @@ export default function ChatPage() {
         <div className={styles.sidebarHeader}>
           <div className={styles.sidebarLogo}>
             <div className={styles.logoOrb} />
-            <span>Sapti</span>
+            <span>Nexus AI</span>
           </div>
           <button
             className="btn btn-ghost btn-icon"
@@ -447,12 +447,12 @@ export default function ChatPage() {
                   Hey{user?.email ? `, ${user.email.split("@")[0]}` : ""}
                 </h2>
                 <p className="text-secondary">
-                  I&apos;m Sapti — an evolving intelligence. Ask me anything, tell
+                  I&apos;m Nexus AI — an evolving intelligence. Ask me anything, tell
                   me about your day, or let&apos;s explore ideas together.
                 </p>
                 <div className={styles.suggestions}>
                   {[
-                    "Tell me about yourself, Sapti",
+                    "Tell me about yourself, Nexus AI",
                     "I need help thinking through something",
                     "What's on your mind today?",
                   ].map((suggestion) => (
@@ -525,7 +525,7 @@ export default function ChatPage() {
             <textarea
               ref={textareaRef}
               className={styles.chatInput}
-              placeholder="Ask anything to Sapti..."
+              placeholder="Ask anything to Nexus AI..."
               value={input}
               onChange={handleInputContent}
               onKeyDown={handleKeyDown}
@@ -544,7 +544,7 @@ export default function ChatPage() {
             </button>
           </div>
           <p className={styles.inputHint}>
-            Sapti remembers your conversations and evolves through the Hive Mind
+            Nexus AI remembers your conversations and evolves through the Collective Knowledge
             <span style={{ opacity: 0.6, marginLeft: '8px' }}>•  Shift + Enter ↵ for new line</span>
           </p>
         </div>

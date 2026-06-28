@@ -90,7 +90,7 @@ export default function LoginPage() {
             onClick={() => router.push("/")}
           />
           <h1>Welcome back</h1>
-          <p>Sign in to continue your journey with Sapti</p>
+          <p>Sign in to continue your journey with Nexus AI</p>
         </div>
 
         <button

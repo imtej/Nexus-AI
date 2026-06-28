@@ -1406,7 +1406,7 @@ wheels = [
 ]
 
 [[package]]
-name = "sapti-backend"
+name = "nexus-backend"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

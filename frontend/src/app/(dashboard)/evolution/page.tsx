@@ -71,7 +71,7 @@ export default function EvolutionPage() {
         <button className="btn btn-ghost" onClick={() => router.push("/chat")}>
           ← Back to Chat
         </button>
-        <h1>Sapti&apos;s Evolution</h1>
+        <h1>Nexus AI&apos;s Evolution</h1>
         <div style={{ width: 100 }} />
       </header>
 

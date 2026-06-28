@@ -1,5 +1,5 @@
 """
-Sapti AI — Chat API Routes
+Nexus AI — Chat API Routes
 Handles chat streaming via SSE.
 """
 
@@ -12,9 +12,9 @@ from sse_starlette.sse import EventSourceResponse
 from app.api.middleware.auth import get_current_user
 from app.api.deps import get_llm_for_user
 from app.models.conversation import ChatRequest
-from app.agents.graph import get_sapti_graph
-from app.agents.state import SaptiState
-from app.agents.chronicler import chronicler_node
+from app.agents.graph import get_orchestration_graph
+from app.agents.state import WorkflowState
+from app.agents.memory_extractor import memory_extractor_node
 from app.services.supabase_client import get_supabase_admin
 from app.utils.crypto import decrypt_api_key
 from app.config.settings import get_settings
@@ -29,7 +29,7 @@ async def chat_stream(
     chat_request: ChatRequest,
     request: Request,
 ):
-    """Stream a chat response from Sapti via Server-Sent Events."""
+    """Stream a chat response from Nexus AI via Server-Sent Events."""
     user = await get_current_user(request)
     user_id = user["user_id"]
     llm_service = await get_llm_for_user(request)
@@ -41,14 +41,14 @@ async def chat_stream(
     # Get or create conversation
     conversation_id = chat_request.conversation_id
     if not conversation_id:
-        conv_result = db.table("conversations").insert({
+        conv_result = db.table("nexus_conversations").insert({
             "user_id": user_id,
             "title": chat_request.message[:50] + ("..." if len(chat_request.message) > 50 else ""),
         }).execute()
         conversation_id = conv_result.data[0]["id"]
 
     # Store user message
-    db.table("messages").insert({
+    db.table("nexus_messages").insert({
         "conversation_id": conversation_id,
         "role": "user",
         "content": chat_request.message,
@@ -56,7 +56,7 @@ async def chat_stream(
 
     # Get conversation history (last 20 messages)
     history_result = (
-        db.table("messages")
+        db.table("nexus_messages")
         .select("role, content")
         .eq("conversation_id", conversation_id)
         .order("created_at")
@@ -66,7 +66,7 @@ async def chat_stream(
     conversation_history = history_result.data or []
 
     profile_result = (
-        db.table("profiles")
+        db.table("nexus_profiles")
         .select("free_chats_used, custom_key_chats_used, encrypted_api_key, llm_provider, display_name")
         .eq("id", user_id)
         .single()
@@ -95,9 +95,9 @@ async def chat_stream(
 #             }
 # 
 #             # Run the LangGraph workflow
-#             graph = get_sapti_graph()
+#             graph = get_orchestration_graph()
 # 
-#             initial_state = SaptiState(
+#             initial_state = WorkflowState(
 #                 user_id=user_id,
 #                 user_name=display_name,
 #                 user_message=chat_request.message,
@@ -152,7 +152,7 @@ async def chat_stream(
 #                 
 #                 logger.info("generator_start", user_id=user_id)
 # 
-################# Horse 4 generator executes here outside from generator.py due to real hardware level chat streaming here #################
+################# Node 4 generator executes here outside from generator.py due to real hardware level chat streaming here #################
 #                 response_text = ""
 #                 # Native fast streaming directly hooked to LiteLLM chunk yields
 #                 try:
@@ -179,7 +179,7 @@ async def chat_stream(
 #             result["response"] = response_text
 # 
 #             # Store assistant response
-#             msg_result = db.table("messages").insert({
+#             msg_result = db.table("nexus_messages").insert({
 #                 "conversation_id": conversation_id,
 #                 "role": "assistant",
 #                 "content": response_text,
@@ -193,16 +193,16 @@ async def chat_stream(
 #             # Increment usage trackers
 #             if is_trial: # If user is on trial increment free chats used
 #                 used = free_chats_used + 1
-#                 db.table("profiles").update({
+#                 db.table("nexus_profiles").update({
 #                     "free_chats_used": used,
 #                 }).eq("id", user_id).execute()
 #             else: # If user has provided their own API key increment custom key chats used
-#                 db.table("profiles").update({
+#                 db.table("nexus_profiles").update({
 #                     "custom_key_chats_used": profile.get("custom_key_chats_used", 0) + 1,
 #                 }).eq("id", user_id).execute()
 # 
 #             # Execute chronicler in complete background
-#             final_state = SaptiState(**result)
+#             final_state = WorkflowState(**result)
 #             asyncio.create_task(chronicler_node(final_state))
 # 
 #             # Send completion event
@@ -230,9 +230,9 @@ async def chat_stream(
         async def background_thought_processor():
             try:
                 # Run the LangGraph workflow
-                graph = get_sapti_graph()
+                graph = get_orchestration_graph()
 
-                initial_state = SaptiState(
+                initial_state = WorkflowState(
                     user_id=user_id,
                     user_name=display_name,
                     user_message=chat_request.message,
@@ -270,7 +270,7 @@ async def chat_stream(
                     
                     logger.info("generator_start", user_id=user_id)
 
-###### Horse 4 generator executes here outside from generator.py due to real hardware level chat streaming here #####
+###### Node 4 generator executes here outside from generator.py due to real hardware level chat streaming here #####
                     response_text = ""
                     try:
                         stream = llm_engine.generate_stream(
@@ -295,7 +295,7 @@ async def chat_stream(
                 result["response"] = response_text
 
                 # Store assistant response
-                msg_result = db.table("messages").insert({
+                msg_result = db.table("nexus_messages").insert({
                     "conversation_id": conversation_id,
                     "role": "assistant",
                     "content": response_text,
@@ -308,16 +308,16 @@ async def chat_stream(
 
                 if is_trial:
                     used = free_chats_used + 1
-                    db.table("profiles").update({
+                    db.table("nexus_profiles").update({
                         "free_chats_used": used,
                     }).eq("id", user_id).execute()
                 else:
-                    db.table("profiles").update({
+                    db.table("nexus_profiles").update({
                         "custom_key_chats_used": profile.get("custom_key_chats_used", 0) + 1,
                     }).eq("id", user_id).execute()
 
-                final_state = SaptiState(**result)
-                asyncio.create_task(chronicler_node(final_state))
+                final_state = WorkflowState(**result)
+                asyncio.create_task(memory_extractor_node(final_state))
 
                 await queue.put({
                     "event": "done",
@@ -337,7 +337,7 @@ async def chat_stream(
             finally:
                 await queue.put(None)
 
-        # Kick off Sapti's thought sequence in the deep background
+        # Kick off Nexus AI's thought sequence in the deep background
         asyncio.create_task(background_thought_processor())
 
         try:
@@ -347,7 +347,7 @@ async def chat_stream(
                 "data": json.dumps({"conversation_id": conversation_id}),
             }
 
-            # Echo Sapti's exact inner queue back over the SSE web stream
+            # Echo Nexus AI's exact inner queue back over the SSE web stream
             while True:
                 item = await queue.get()
                 if item is None:
@@ -355,7 +355,7 @@ async def chat_stream(
                 yield item
 
         except asyncio.CancelledError:
-            # Wait! Sapti's background processor does not stop! 
+            # Wait! Nexus AI's background processor does not stop! 
             # We simply drop the web stream hook gracefully.
             logger.info("sse_client_disconnected_early", user_id=user_id)
             return

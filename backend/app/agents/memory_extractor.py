@@ -1,5 +1,5 @@
 """
-Sapti AI — Horse 5: Chronicler Agent
+Nexus AI — Node 5: MemoryExtractor Agent
 Extracts and stores memories from conversations (runs async, post-response).
 """
 
@@ -7,7 +7,7 @@ import json
 import asyncio
 import structlog
 from pydantic import BaseModel, Field
-from app.agents.state import SaptiState
+from app.agents.state import WorkflowState
 from app.services.llm_service import LLMService
 from app.services.memory_service import MemoryService
 from app.models.memory import MemoryNodeCreate
@@ -42,14 +42,14 @@ Respond with ONLY valid JSON array: [{{"content": "...", "memory_type": "...", "
 If nothing to extract, respond with: []"""
 
 
-async def chronicler_node(state: SaptiState) -> dict:
-    """Horse 5 — Extract and store memories from the conversation."""
-    logger.info("chronicler_start", user_id=state.user_id)
+async def memory_extractor_node(state: WorkflowState) -> dict:
+    """Node 5 — Extract and store memories from the conversation."""
+    logger.info("memory_extractor_start", user_id=state.user_id)
 
     if not state.response:
         return {"new_memory_ids": []}
         
-    logger.info("chronicler_delay", seconds=5)
+    logger.info("memory_extractor_delay", seconds=5)
     await asyncio.sleep(5)
 
     try:
@@ -84,12 +84,12 @@ async def chronicler_node(state: SaptiState) -> dict:
                 )
                 new_ids.append(stored.id)
             except Exception as e:
-                logger.warning("chronicler_memory_store_fail", error=str(e))
+                logger.warning("memory_extractor_memory_store_fail", error=str(e))
                 continue
 
-        logger.info("chronicler_complete", memories_stored=len(new_ids))
+        logger.info("memory_extractor_complete", memories_stored=len(new_ids))
         return {"new_memory_ids": new_ids}
 
     except Exception as e:
-        logger.warning("chronicler_error", error=str(e))
+        logger.warning("memory_extractor_error", error=str(e))
         return {"new_memory_ids": []}

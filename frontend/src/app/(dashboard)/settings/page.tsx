@@ -32,7 +32,7 @@ export default function SettingsPage() {
         setProvider(profile.llm_provider || "gemini");
         setHasApiKey(profile.has_api_key || false);
         setFreeChats(profile.free_chats_remaining || 0);
-        setHiveMindOptIn(profile.hive_mind_opt_in ?? true);
+        setHiveMindOptIn(profile.collective_knowledge_opt_in ?? true);
       }).catch(() => {});
     });
   }, []);
@@ -68,7 +68,7 @@ export default function SettingsPage() {
     if (!token) return;
     const newValue = !hiveMindOptIn;
     setHiveMindOptIn(newValue);
-    await api.updateProfile({ hive_mind_opt_in: newValue }, token);
+    await api.updateProfile({ collective_knowledge_opt_in: newValue }, token);
   };
 
   const handleLogout = async () => {
@@ -165,13 +165,12 @@ export default function SettingsPage() {
           )}
         </section>
 
-        {/* Hive Mind */}
+        {/* Collective Knowledge */}
         <section className={styles.section}>
-          <h2>🧬 Hive Mind</h2>
+          <h2>🧬 Collective Knowledge</h2>
           <p className="text-secondary text-sm">
-            When enabled, Sapti may distill anonymized insights from your
-            conversations to help evolve its collective wisdom. Your personal
-            data is never shared.
+            When enabled, Nexus AI may distill anonymized insights from your
+            conversations to enrich the global Collective Knowledge. No personal data is shared.
           </p>
           <label className={styles.toggle}>
             <input
@@ -180,7 +179,7 @@ export default function SettingsPage() {
               onChange={handleToggleHiveMind}
             />
             <span className={styles.toggleSlider} />
-            <span>Contribute to the Hive Mind</span>
+            <span>Contribute to the Collective Knowledge</span>
           </label>
         </section>
 
@@ -188,7 +187,7 @@ export default function SettingsPage() {
         <section className={styles.section}>
           <h2>⚖️ Legal & Transparency</h2>
           <p className="text-secondary text-sm" style={{ marginBottom: "var(--space-md)" }}>
-            Review how your data is handled and the rules of engagement for interacting with Sapti.
+            Review how your data is handled and the rules of engagement for interacting with Nexus AI.
           </p>
           <div style={{ display: "flex", gap: "var(--space-md)" }}>
             <Link href="/privacy" className="btn btn-secondary btn-sm">Privacy Policy</Link>

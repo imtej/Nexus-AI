@@ -12,5 +12,5 @@ jobs:
     steps:
       - name: Ping Render Backend
         run: |
-          curl -I https://sapti-ai.onrender.com/
-          echo "Keep-alive/Heart-beat ping sent to Sapti AI Backend"
+          curl -I https://nexus-ai.onrender.com/
+          echo "Keep-alive/Heart-beat ping sent to Nexus AI Backend"

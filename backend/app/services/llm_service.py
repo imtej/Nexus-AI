@@ -1,5 +1,5 @@
 """
-Sapti AI — LLM Service (Provider-Agnostic)
+Nexus AI — LLM Service (Provider-Agnostic)
 Uses LiteLLM to support Gemini, OpenAI, and Anthropic.
 """
 
@@ -89,7 +89,7 @@ class LLMService:
 
         except Exception as e:
             logger.error("llm_generation_error", error=str(e), provider=self.provider)
-            yield f"\n\n[Sapti encountered an error: I seem to have lost my train of thought due to a brief network hiccup / API error. Let's try that again.]"
+            yield f"\n\n[Nexus AI encountered an error: I seem to have lost my train of thought due to a brief network hiccup / API error. Let's try that again.]"
 
 #### This entire function was explicitly designed to do generate full response 
 # without streaming tokens from hardware level from api provider,

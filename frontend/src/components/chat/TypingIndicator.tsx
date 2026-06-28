@@ -1,7 +1,7 @@
 import styles from "./TypingIndicator.module.css";
 
 /**
- * TypingIndicator — shows animated dots when Sapti is thinking.
+ * TypingIndicator — shows animated dots when Nexus AI is thinking.
  */
 export default function TypingIndicator() {
   return (

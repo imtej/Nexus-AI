@@ -1,5 +1,5 @@
 """
-Sapti AI — Auth Routes
+Nexus AI — Auth Routes
 Auth verification and user info endpoints.
 """
 
@@ -22,7 +22,7 @@ async def get_current_user_info(request: Request):
 
     # Get profile
     profile_result = (
-        db.table("profiles")
+        db.table("nexus_profiles")
         .select("id, display_name, avatar_url, free_chats_used")
         .eq("id", user["user_id"])
         .single()

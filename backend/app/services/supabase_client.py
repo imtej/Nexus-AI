@@ -1,5 +1,5 @@
 """
-Sapti AI — Supabase Client Service
+Nexus AI — Supabase Client Service
 Handles all database operations via Supabase.
 """
 

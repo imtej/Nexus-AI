@@ -1,5 +1,5 @@
 """
-Sapti AI — Horse 6(A): Identity Builder Agent
+Nexus AI — Node 6A: User Profiler Agent
 Forges and incrementally evolves the UserIdentity profile (periodic/cron).
 """
 
@@ -22,7 +22,7 @@ class UserIdentityExtraction(BaseModel):
     emotional_baseline: str = Field(description="The user's default emotional baseline (e.g. 'thoughtful but prone to anxiety', 'optimistic and curious').")
     communication_style: str = Field(description="How the user typically communicates (e.g. 'terse and direct', 'elaborate and philosophical').")
 
-IDENTITY_EVOLUTION_PROMPT = """You are the Sapti Identity Architect.
+PROFILE_EVOLUTION_PROMPT = """You are the Nexus AI Profiler.
 Your task is to analyze a user's new memory nodes and incrementally evolve their core psychological identity profile.
 
 {existing_identity_context}
@@ -34,9 +34,9 @@ Analyze these new memories. If there is an existing identity, EVOLVE it seamless
 
 Extract and return the highly refined UserIdentity structure."""
 
-async def run_identity_builder_cycle():
-    """Run a full Identity Builder cycle. Called periodically."""
-    logger.info("identity_builder_cycle_start")
+async def run_user_profiling_cycle():
+    """Run a full User Profiler cycle. Called periodically."""
+    logger.info("user_profiler_cycle_start")
     
     MINIMUM_NEW_MEMORIES = 5
     # MINIMUM_NEW_MEMORIES = 10
@@ -47,7 +47,7 @@ async def run_identity_builder_cycle():
     
     try:
         # 1. Fetch active users (limit to 50 for safety in a single cycle)
-        users_result = db.table("profiles").select("id, encrypted_api_key, llm_provider").limit(50).execute() # encrypted_api_key and llm_provider are used to determine if the user has provided their own API key
+        users_result = db.table("nexus_profiles").select("id, encrypted_api_key, llm_provider").limit(50).execute() # encrypted_api_key and llm_provider are used to determine if the user has provided their own API key
         
         if not users_result.data:
             return
@@ -97,7 +97,7 @@ async def run_identity_builder_cycle():
                 )
 
             # Fetch new memories since last update
-            query = db.table("memory_nodes").select("content, memory_type").eq("user_id", user_id).eq("is_active", True)
+            query = db.table("nexus_memory_nodes").select("content, memory_type").eq("user_id", user_id).eq("is_active", True)
             if last_updated:
                 query = query.filter("created_at", "gt", last_updated)
                 
@@ -109,14 +109,14 @@ async def run_identity_builder_cycle():
                 # logger.info("identity_builder_insufficient_new_data", user_id=user_id, new_memories=len(new_memories), required=MINIMUM_NEW_MEMORIES)
                 continue
                 
-            logger.info("identity_builder_processing_user", user_id=user_id, new_memories=len(new_memories))
+                logger.info("user_profiler_processing_user", user_id=user_id, new_memories=len(new_memories))
             
             # Format new memories
             new_memories_list = "\n".join(
                 f"- [{m['memory_type']}] {m['content']}" for m in new_memories
             )
             
-            prompt = IDENTITY_EVOLUTION_PROMPT.format(
+            prompt = PROFILE_EVOLUTION_PROMPT.format(
                 existing_identity_context=existing_context,
                 memory_count=len(new_memories),
                 new_memories_list=new_memories_list
@@ -143,10 +143,10 @@ async def run_identity_builder_cycle():
                 identities_forged += 1
                 
             except Exception as e:
-                logger.error("identity_builder_upsert_error", user_id=user_id, error=str(e))
+                logger.error("user_profiler_upsert_error", user_id=user_id, error=str(e))
                 continue
-        logger.info("identity_builder_insufficient_new_data", users_insufficient_new_memories=users_insufficient_new_memories, total_users_considered=total_users_considered)
-        logger.info("identity_builder_cycle_complete", identities_forged=identities_forged, total_users_considered=total_users_considered)
+        logger.info("user_profiler_insufficient_new_data", users_insufficient_new_memories=users_insufficient_new_memories, total_users_considered=total_users_considered)
+        logger.info("user_profiler_cycle_complete", identities_forged=identities_forged, total_users_considered=total_users_considered)
         
     except Exception as e:
-        logger.error("identity_builder_cycle_error", error=str(e))
+        logger.error("user_profiler_cycle_error", error=str(e))

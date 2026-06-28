@@ -1,5 +1,5 @@
 """
-Sapti AI — Memory Data Models
+Nexus AI — Memory Data Models
 """
 
 from pydantic import BaseModel, Field, field_validator
@@ -17,7 +17,7 @@ class MemoryType(str, Enum):
     EMOTIONAL_STATE = "emotional_state"
 
 
-class HiveMindCategory(str, Enum):
+class CollectiveKnowledgeCategory(str, Enum):
     WISDOM = "wisdom"
     PATTERN = "pattern"
     KNOWLEDGE = "knowledge"
@@ -64,11 +64,11 @@ class MemoryNodeCreate(BaseModel):
         use_enum_values = True
 
 
-class HiveMindInsight(BaseModel):
-    """A shared, anonymized insight in the Hive Mind."""
+class CollectiveKnowledgeInsight(BaseModel):
+    """A shared, anonymized insight in the Collective Knowledge Base."""
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     content: str
-    category: HiveMindCategory
+    category: CollectiveKnowledgeCategory
     tags: list[str] = Field(default_factory=list)
     embedding: Optional[list[float]] = None
     contributor_count: int = 1

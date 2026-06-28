@@ -1,5 +1,5 @@
 """
-Sapti AI — Embedding Service
+Nexus AI — Embedding Service
 Uses Gemini embeddings (768d) for all users, server-side.
 """
 

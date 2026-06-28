@@ -1,5 +1,5 @@
 """
-Sapti AI — Configuration Settings
+Nexus AI — Configuration Settings
 Pydantic-based settings with environment variable support.
 """
 
@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     # --- App ---
-    app_name: str = "Sapti AI"
+    app_name: str = "Nexus AI"
     app_version: str = "1.0.0"
     debug: bool = False
     log_level: str = "INFO"
@@ -37,7 +37,7 @@ class Settings(BaseSettings):
 
     # --- Memory ---
     personal_memory_limit: int = 5
-    hive_mind_memory_limit: int = 3
+    collective_knowledge_limit: int = 3
     memory_recency_decay: float = 0.95
 
     # --- Encryption ---

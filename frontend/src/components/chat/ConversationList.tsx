@@ -30,7 +30,7 @@ export default function ConversationList({
     return (
       <div className={styles.empty}>
         <p>No conversations yet</p>
-        <p className="text-sm text-secondary">Start chatting with Sapti!</p>
+        <p className="text-sm text-secondary">Start chatting with Nexus AI!</p>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 /**
- * Sapti AI — Utility Functions
+ * Nexus AI — Utility Functions
  */
 
 /**

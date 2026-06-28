@@ -24,7 +24,7 @@ export default function Sidebar({ isOpen, onClose, children }: SidebarProps) {
         <div className={styles.header}>
           <div className={styles.logo} onClick={() => router.push("/")}>
             <div className={styles.logoOrb} />
-            <span>Sapti</span>
+            <span>Nexus AI</span>
           </div>
           <button className="btn btn-ghost btn-icon" onClick={onClose} title="Close sidebar">
             ✕

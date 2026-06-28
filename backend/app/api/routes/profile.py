@@ -1,5 +1,5 @@
 """
-Sapti AI — Profile API Routes
+Nexus AI — Profile API Routes
 User profile and API key management.
 """
 
@@ -24,8 +24,8 @@ async def get_profile(request: Request):
     db = get_supabase_admin()
 
     result = (
-        db.table("profiles")
-        .select("id, display_name, avatar_url, llm_provider, hive_mind_opt_in, free_chats_used, custom_key_chats_used, created_at")
+        db.table("nexus_profiles")
+        .select("id, display_name, avatar_url, llm_provider, collective_knowledge_opt_in, free_chats_used, custom_key_chats_used, created_at")
         .eq("id", user["user_id"])
         .single()
         .execute()
@@ -40,8 +40,8 @@ async def get_profile(request: Request):
             "free_chats_used": 0,
             "custom_key_chats_used": 0,
         }
-        db.table("profiles").insert(new_profile).execute()
-        result = db.table("profiles").select("*").eq("id", user["user_id"]).single().execute()
+        db.table("nexus_profiles").insert(new_profile).execute()
+        result = db.table("nexus_profiles").select("*").eq("id", user["user_id"]).single().execute()
 
     profile = result.data
 
@@ -49,7 +49,7 @@ async def get_profile(request: Request):
     # Hide free chats remainder if user supplied their own API key
     settings = get_settings()
     has_key = bool(
-        db.table("profiles")
+        db.table("nexus_profiles")
         .select("encrypted_api_key")
         .eq("id", user["user_id"])
         .single()
@@ -81,7 +81,7 @@ async def update_profile(update: UserProfileUpdate, request: Request):
     if not update_data:
         raise HTTPException(status_code=400, detail="No fields to update")
 
-    db.table("profiles").update(update_data).eq("id", user["user_id"]).execute()
+    db.table("nexus_profiles").update(update_data).eq("id", user["user_id"]).execute()
 
     return {"status": "updated"}
 
@@ -98,7 +98,7 @@ async def set_api_key(key_update: UserAPIKeyUpdate, request: Request):
     # Encrypt the API key
     encrypted = encrypt_api_key(key_update.api_key)
 
-    db.table("profiles").update({
+    db.table("nexus_profiles").update({
         "llm_provider": key_update.provider,
         "encrypted_api_key": encrypted,
     }).eq("id", user["user_id"]).execute()
@@ -114,7 +114,7 @@ async def remove_api_key(request: Request):
     user = await get_current_user(request)
     db = get_supabase_admin()
 
-    db.table("profiles").update({
+    db.table("nexus_profiles").update({
         "encrypted_api_key": None,
     }).eq("id", user["user_id"]).execute()
 

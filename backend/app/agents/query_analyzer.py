@@ -1,17 +1,17 @@
 """
-Sapti AI — Horse 1: Perceiver Agent
+Nexus AI — Node 1: QueryAnalyzer Agent
 From the user message, detects user intent, emotional signals, and generates an expanded search query for vector database.
 """
 
 import json
 import structlog
 from pydantic import BaseModel, Field
-from app.agents.state import SaptiState
+from app.agents.state import WorkflowState
 from app.services.llm_service import LLMService
 
 logger = structlog.get_logger()
 
-class PerceiverAnalysis(BaseModel):
+class QueryAnalysis(BaseModel):
     intent: str = Field(description="The primary intent. One of: greeting, question, sharing, venting, seeking_advice, casual_chat, deep_conversation, farewell, other")
     emotion: str = Field(description="The emotional signal. One of: happy, sad, anxious, excited, neutral, frustrated, curious, grateful, nostalgic, vulnerable")
     search_query: str = Field(description="A highly optimized vector search string expanding the user's message using conversation context to fetch relevant database memories.")
@@ -29,9 +29,9 @@ For example, if the user says "yeah tell me more about it", the search query sho
 If the message is just a standalone greeting like "hi", the search query can just be "greeting"."""
 
 
-async def perceiver_node(state: SaptiState) -> dict:
-    """Horse 1 — Detect intent and emotion from user message."""
-    logger.info("perceiver_start", user_id=state.user_id)
+async def query_analyzer_node(state: WorkflowState) -> dict:
+    """Node 1 — Detect intent and emotion from user message."""
+    logger.info("query_analyzer_start", user_id=state.user_id)
 
     try:
         llm = LLMService(
@@ -50,10 +50,10 @@ async def perceiver_node(state: SaptiState) -> dict:
         prompt = INTENT_PROMPT.format(history=history_text, message=state.user_message)
         
         # Pydantic Structured Output handles all JSON formatting and extraction flawlessly
-        analysis = await llm.fast_extract(prompt, schema=PerceiverAnalysis)
+        analysis = await llm.fast_extract(prompt, schema=QueryAnalysis)
 
         logger.info(
-            "perceiver_complete", 
+            "query_analyzer_complete", 
             intent=analysis.intent, 
             emotion=analysis.emotion,
             search_query=analysis.search_query
@@ -65,7 +65,7 @@ async def perceiver_node(state: SaptiState) -> dict:
         }
 
     except Exception as e:
-        logger.warning("perceiver_fallback", error=str(e))
+        logger.warning("query_analyzer_fallback", error=str(e))
         return {
             "intent": "other", 
             "emotion_signal": "neutral",

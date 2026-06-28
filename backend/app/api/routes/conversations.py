@@ -1,5 +1,5 @@
 """
-Sapti AI — Conversation API Routes
+Nexus AI — Conversation API Routes
 CRUD operations for conversations.
 """
 
@@ -21,7 +21,7 @@ async def list_conversations(request: Request):
     db = get_supabase_admin()
 
     result = (
-        db.table("conversations")
+        db.table("nexus_conversations")
         .select("id, title, created_at, updated_at")
         .eq("user_id", user["user_id"])
         .order("updated_at", desc=True)
@@ -40,7 +40,7 @@ async def get_conversation(conversation_id: str, request: Request):
 
     # Verify ownership
     conv_result = (
-        db.table("conversations")
+        db.table("nexus_conversations")
         .select("*")
         .eq("id", conversation_id)
         .eq("user_id", user["user_id"])
@@ -53,7 +53,7 @@ async def get_conversation(conversation_id: str, request: Request):
 
     # Get messages
     msg_result = (
-        db.table("messages")
+        db.table("nexus_messages")
         .select("id, role, content, metadata, created_at")
         .eq("conversation_id", conversation_id)
         .order("created_at")
@@ -74,7 +74,7 @@ async def delete_conversation(conversation_id: str, request: Request):
 
     # Verify ownership
     conv_result = (
-        db.table("conversations")
+        db.table("nexus_conversations")
         .select("id")
         .eq("id", conversation_id)
         .eq("user_id", user["user_id"])
@@ -86,8 +86,8 @@ async def delete_conversation(conversation_id: str, request: Request):
         raise HTTPException(status_code=404, detail="Conversation not found")
 
     # Delete messages first (cascade), then conversation
-    db.table("messages").delete().eq("conversation_id", conversation_id).execute()
-    db.table("conversations").delete().eq("id", conversation_id).execute()
+    db.table("nexus_messages").delete().eq("conversation_id", conversation_id).execute()
+    db.table("nexus_conversations").delete().eq("id", conversation_id).execute()
 
     return {"status": "deleted"}
 
@@ -104,7 +104,7 @@ async def update_conversation(
 
     # Verify ownership
     conv_result = (
-        db.table("conversations")
+        db.table("nexus_conversations")
         .select("id")
         .eq("id", conversation_id)
         .eq("user_id", user["user_id"])
@@ -120,6 +120,6 @@ async def update_conversation(
         update_data["title"] = body["title"]
 
     if update_data:
-        db.table("conversations").update(update_data).eq("id", conversation_id).execute()
+        db.table("nexus_conversations").update(update_data).eq("id", conversation_id).execute()
 
     return {"status": "updated"}

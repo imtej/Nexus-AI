@@ -1,46 +1,46 @@
 """
-Sapti AI — LangGraph Workflow Definition
-Orchestrates the 7 Horses into a coherent workflow.
+Nexus AI — LangGraph Workflow Definition
+Orchestrates the 7 Agentic Nodes into a coherent workflow.
 """
 
 import structlog
 from langgraph.graph import StateGraph, END
 
-from app.agents.state import SaptiState
-from app.agents.perceiver import perceiver_node
-from app.agents.rememberer import rememberer_node
-from app.agents.world_builder import world_builder_node
-from app.agents.generator import generator_node
+from app.agents.state import WorkflowState
+from app.agents.query_analyzer import query_analyzer_node
+from app.agents.context_retriever import context_retriever_node
+from app.agents.prompt_builder import prompt_builder_node
+from app.agents.response_generator import response_generator_node
 
 logger = structlog.get_logger()
 
 
-def build_sapti_graph() -> StateGraph:
-    """Build the LangGraph workflow for Sapti's conversation pipeline.
+def build_orchestration_graph() -> StateGraph:
+    """Build the LangGraph workflow for the conversation pipeline.
 
     Flow:
-        perceiver → rememberer → world_builder → generator → chronicler → END
+        query_analyzer → context_retriever → prompt_builder → response_generator → memory_extractor → END
 
-    Horses 1-4 are in the critical path (sync).
-    Horse 5 (chronicler) runs after response generation.
-    Horses 6-7 (curator, evolver) run as periodic background tasks, not in this graph.
+    Nodes 1-4 are in the critical path (sync).
+    Node 5 (memory_extractor) runs after response generation.
+    Nodes 6-7 (insight_distiller, evolution_engine) run as periodic background tasks, not in this graph.
     """
 
-    graph = StateGraph(SaptiState)
+    graph = StateGraph(WorkflowState)
 
-    # Add nodes (the horses)
-    graph.add_node("perceiver", perceiver_node)
-    graph.add_node("rememberer", rememberer_node)
-    graph.add_node("world_builder", world_builder_node)
-    # graph.add_node("generator", generator_node)        ## Added generator with stream in directly chat.py
+    # Add nodes
+    graph.add_node("query_analyzer", query_analyzer_node)
+    graph.add_node("context_retriever", context_retriever_node)
+    graph.add_node("prompt_builder", prompt_builder_node)
+    # graph.add_node("response_generator", response_generator_node)        ## Added generator with stream in directly chat.py
 
     # Define edges (linear flow)
-    graph.set_entry_point("perceiver")
-    graph.add_edge("perceiver", "rememberer")
-    graph.add_edge("rememberer", "world_builder")
-    # graph.add_edge("world_builder", "generator")      ## Added generator with stream in directly chat.py
-    # graph.add_edge("generator", END)                  ## Added generator with stream in directly chat.py
-    graph.add_edge("world_builder", END)
+    graph.set_entry_point("query_analyzer")
+    graph.add_edge("query_analyzer", "context_retriever")
+    graph.add_edge("context_retriever", "prompt_builder")
+    # graph.add_edge("prompt_builder", "response_generator")      ## Added generator with stream in directly chat.py
+    # graph.add_edge("response_generator", END)                  ## Added generator with stream in directly chat.py
+    graph.add_edge("prompt_builder", END)
 
     return graph
 
@@ -49,11 +49,11 @@ def build_sapti_graph() -> StateGraph:
 _compiled_graph = None
 
 
-def get_sapti_graph():
-    """Get the compiled Sapti workflow graph (cached)."""
+def get_orchestration_graph():
+    """Get the compiled workflow graph (cached)."""
     global _compiled_graph
     if _compiled_graph is None:
-        graph = build_sapti_graph()
+        graph = build_orchestration_graph()
         _compiled_graph = graph.compile()
-        logger.info("sapti_graph_compiled")
+        logger.info("orchestration_graph_compiled")
     return _compiled_graph

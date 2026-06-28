@@ -9,7 +9,7 @@ interface EvolutionOrbProps {
 }
 
 /**
- * EvolutionOrb — animated gradient orb that changes color based on Sapti's evolution stage.
+ * EvolutionOrb — animated gradient orb that changes color based on System's evolution stage.
  */
 export default function EvolutionOrb({ stage, size = 120 }: EvolutionOrbProps) {
   const color = getStageColor(stage);

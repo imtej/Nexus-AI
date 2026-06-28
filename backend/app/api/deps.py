@@ -1,5 +1,5 @@
 """
-Sapti AI — API Dependencies
+Nexus AI — API Dependencies
 FastAPI dependency injection functions.
 """
 
@@ -32,7 +32,7 @@ async def get_llm_for_user(request: Request) -> LLMService:
 
     # Get user profile
     profile_result = (
-        db.table("profiles")
+        db.table("nexus_profiles")
         .select("llm_provider, encrypted_api_key, free_chats_used")
         .eq("id", user_id)
         .single()
@@ -42,7 +42,7 @@ async def get_llm_for_user(request: Request) -> LLMService:
     profile = profile_result.data
     if not profile:
         # First-time user — create profile with default free chats
-        db.table("profiles").insert({
+        db.table("nexus_profiles").insert({
             "id": user_id,
         }).execute()
         return get_default_llm_service()
@@ -63,5 +63,5 @@ async def get_llm_for_user(request: Request) -> LLMService:
         from fastapi import HTTPException
         raise HTTPException(
             status_code=402,
-            detail="Free trial expired. Please add your API key in settings to continue chatting with Sapti.",
+            detail="Free trial expired. Please add your API key in settings to continue chatting with Nexus AI.",
         )

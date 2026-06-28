@@ -1,5 +1,5 @@
 """
-Sapti AI — Memory Service
+Nexus AI — Memory Service
 Handles memory CRUD and vector search via Supabase pgvector.
 """
 
@@ -7,7 +7,7 @@ import structlog
 from typing import Optional
 from datetime import datetime
 
-from app.models.memory import MemoryNode, MemoryNodeCreate, HiveMindInsight, MemorySearchResult
+from app.models.memory import MemoryNode, MemoryNodeCreate, CollectiveKnowledgeInsight, MemorySearchResult
 from app.services.supabase_client import get_supabase_admin
 from app.services.embedding_service import generate_embedding, generate_query_embedding
 from app.config.settings import get_settings
@@ -39,7 +39,7 @@ class MemoryService:
                 "importance_score": 0.5,
             }
 
-            result = self.db.table("memory_nodes").insert(data).execute()
+            result = self.db.table("nexus_memory_nodes").insert(data).execute()
 
             if result.data:
                 node_data = result.data[0]
@@ -110,19 +110,19 @@ class MemoryService:
             logger.error("personal_memory_search_error", user_id=user_id, error=str(e))
             return []
 
-    async def search_hive_mind(
+    async def search_collective_knowledge(
         self,
         query: str,
         limit: int | None = None,
-    ) -> list[HiveMindInsight]:
-        """Search Hive Mind memories using vector similarity."""
-        limit = limit or self.settings.hive_mind_memory_limit
+    ) -> list[CollectiveKnowledgeInsight]:
+        """Search Collective Knowledge memories using vector similarity."""
+        limit = limit or self.settings.collective_knowledge_limit
 
         try:
             query_embedding = await generate_query_embedding(query)
 
             result = self.db.rpc(
-                "search_hive_mind",
+                "search_collective_knowledge",
                 {
                     "query_embedding": query_embedding,
                     "match_count": limit,
@@ -133,7 +133,7 @@ class MemoryService:
             if result.data:
                 for row in result.data:
                     insights.append(
-                        HiveMindInsight(
+                        CollectiveKnowledgeInsight(
                             id=row["id"],
                             content=row["content"],
                             category=row["category"],
@@ -143,11 +143,11 @@ class MemoryService:
                         )
                     )
 
-            logger.info("hive_mind_searched", results=len(insights))
+            logger.info("collective_knowledge_searched", results=len(insights))
             return insights
 
         except Exception as e:
-            logger.error("hive_mind_search_error", error=str(e))
+            logger.error("collective_knowledge_search_error", error=str(e))
             return []
 
     async def get_recent_memories(
@@ -158,7 +158,7 @@ class MemoryService:
         """Get recent memories as fallback when vector search yields few results."""
         try:
             result = (
-                self.db.table("memory_nodes")
+                self.db.table("nexus_memory_nodes")
                 .select("*")
                 .eq("user_id", user_id)
                 .eq("is_active", True)
@@ -177,7 +177,7 @@ class MemoryService:
         """Get the user's identity profile."""
         try:
             result = (
-                self.db.table("user_identities")
+                self.db.table("nexus_user_identities")
                 .select("*")
                 .eq("user_id", user_id)
                 .single()
@@ -193,7 +193,7 @@ class MemoryService:
             identity_data["user_id"] = user_id
             identity_data["updated_at"] = datetime.utcnow().isoformat()
 
-            self.db.table("user_identities").upsert(
+            self.db.table("nexus_user_identities").upsert(
                 identity_data,
                 on_conflict="user_id",
             ).execute()

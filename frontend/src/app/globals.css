@@ -1,5 +1,5 @@
 /* ============================================
-   Sapti AI — Global Design System
+   Nexus AI — Global Design System
    A living, breathing intelligence UI
    ============================================ */
 
@@ -35,11 +35,11 @@
   --accent-red: #ff4757;
   --accent-cyan: #45aaf2;
 
-  /* Sapti Evolution Colors */
-  --sapti-nascent: #6c63ff;
-  --sapti-growing: #a29bfe;
-  --sapti-mature: #f0b429;
-  --sapti-transcendent: #ff6b6b;
+  /* Nexus AI Evolution Colors */
+  --nexus-nascent: #6c63ff;
+  --nexus-growing: #00d2ff;
+  --nexus-mature: #f093fb;
+  --nexus-transcendent: #f5576c;
 
   /* Text */
   --text-primary: #e8e8f0;

@@ -1,5 +1,5 @@
 """
-Sapti AI — Horse 3: WorldBuilder Agent
+Nexus AI — Node 3: PromptBuilder Agent
 Constructs the dynamic system prompt with personality, memories, and context.
 """
 
@@ -7,7 +7,7 @@ import structlog
 import yaml
 from pathlib import Path
 
-from app.agents.state import SaptiState
+from app.agents.state import WorkflowState
 from app.services.supabase_client import get_supabase_admin
 
 logger = structlog.get_logger()
@@ -20,7 +20,7 @@ def _get_personality_config() -> dict:
     """Load and cache the personality YAML config."""
     global _personality_config
     if _personality_config is None:
-        config_path = Path(__file__).parent.parent / "config" / "sapti_personality.yaml"
+        config_path = Path(__file__).parent.parent / "config" / "system_personality.yaml"
         with open(config_path, "r") as f:
             _personality_config = yaml.safe_load(f)
     return _personality_config
@@ -29,7 +29,7 @@ def _get_personality_config() -> dict:
 def _get_evolution_modifier(total_interactions: int) -> str:
     """Get personality modifier based on evolution stage."""
     config = _get_personality_config()
-    stages = config["sapti"]["evolution_stages"]
+    stages = config["system"]["evolution_stages"]
 
     if total_interactions >= 10000:
         return stages["transcendent"]["personality_modifier"]
@@ -40,16 +40,16 @@ def _get_evolution_modifier(total_interactions: int) -> str:
     return stages["nascent"]["personality_modifier"]
 
 
-async def world_builder_node(state: SaptiState) -> dict:
-    """Horse 3 — Build the dynamic system prompt."""
-    logger.info("world_builder_start", user_id=state.user_id)
+async def prompt_builder_node(state: WorkflowState) -> dict:
+    """Node 3 — Build the dynamic system prompt."""
+    logger.info("prompt_builder_start", user_id=state.user_id)
 
     config = _get_personality_config()
 
-    # Get Sapti's evolution state
+    # Get System's evolution state
     db = get_supabase_admin()
     try:
-        evolution_result = db.table("sapti_evolution").select("*").eq("id", 1).single().execute()
+        evolution_result = db.table("system_evolution").select("*").eq("id", 1).single().execute()
         evolution = evolution_result.data or {}
     except Exception:
         evolution = {"total_interactions": 0}
@@ -60,7 +60,7 @@ async def world_builder_node(state: SaptiState) -> dict:
     sections = []
 
     # 1. Core personality
-    sections.append(config["sapti"]["core_personality"])
+    sections.append(config["system"]["core_personality"])
 
     # 2. Evolution modifier
     evolution_modifier = _get_evolution_modifier(total_interactions)
@@ -98,10 +98,10 @@ async def world_builder_node(state: SaptiState) -> dict:
             memory_section += f"{i}. [{mem.memory_type}] {mem.content}\n"
         sections.append(memory_section)
 
-    # 5. Hive mind insights
-    if state.hive_mind_memories:
-        hive_section = "\n--- Collective Wisdom (Hive Mind) ---\n"
-        for i, insight in enumerate(state.hive_mind_memories[:3], 1):
+    # 5. Collective knowledge insights
+    if state.collective_knowledge:
+        hive_section = "\n--- Collective Knowledge Base ---\n"
+        for i, insight in enumerate(state.collective_knowledge[:3], 1):
             hive_section += f"{i}. [{insight.category}] {insight.content}\n"
         sections.append(hive_section)
 
@@ -130,11 +130,11 @@ async def world_builder_node(state: SaptiState) -> dict:
     system_prompt = "\n".join(sections)
 
     logger.info(
-        "world_builder_complete",
+        "prompt_builder_complete",
         prompt_length=len(system_prompt),
         has_identity=state.user_identity is not None,
         memory_count=len(state.personal_memories),
-        hive_count=len(state.hive_mind_memories),
+        collective_count=len(state.collective_knowledge),
     )
 
     return {"system_prompt": system_prompt}

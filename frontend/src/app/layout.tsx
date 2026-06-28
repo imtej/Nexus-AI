@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sapti AI — The Evolving Intelligence",
+  title: "Nexus AI — The Evolving Intelligence",
   description:
-    "Sapti is an evolving AI companion powered by the Hive Mind Protocol. It learns, grows, and becomes wiser with every conversation.",
-  keywords: ["AI", "companion", "hive mind", "evolving AI", "Sapti"],
+    "Nexus AI is an evolving AI companion powered by the Collective Knowledge Protocol. It learns, grows, and becomes wiser with every conversation.",
+  keywords: ["AI", "companion", "collective knowledge", "evolving AI", "Nexus AI"],
   openGraph: {
-    title: "Sapti AI — The Evolving Intelligence",
-    description: "Meet Sapti — an AI that evolves through conversation.",
+    title: "Nexus AI — The Evolving Intelligence",
+    description: "Meet Nexus AI — an AI that evolves through conversation.",
     type: "website",
   },
 };

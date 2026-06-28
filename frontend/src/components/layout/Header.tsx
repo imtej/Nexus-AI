@@ -19,7 +19,7 @@ export default function Header({ title, onMenuClick, rightAction }: HeaderProps)
           ☰
         </button>
       )}
-      <span className={styles.title}>{title || "Sapti"}</span>
+      <span className={styles.title}>{title || "Nexus AI"}</span>
       <div className={styles.right}>{rightAction || <div style={{ width: 36 }} />}</div>
     </header>
   );

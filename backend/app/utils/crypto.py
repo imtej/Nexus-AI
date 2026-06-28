@@ -1,5 +1,5 @@
 """
-Sapti AI — Cryptographic Utilities
+Nexus AI — Cryptographic Utilities
 Handles encryption/decryption of user API keys.
 """
 

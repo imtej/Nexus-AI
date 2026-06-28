@@ -1,5 +1,5 @@
 """
-Sapti AI — LangGraph State Schema
+Nexus AI — LangGraph State Schema
 Shared state that flows through the agent workflow.
 """
 
@@ -7,11 +7,11 @@ from typing import Optional, Annotated
 from pydantic import BaseModel, Field
 from langgraph.graph.message import add_messages
 
-from app.models.memory import MemoryNode, MemorySearchResult, HiveMindInsight
+from app.models.memory import MemoryNode, MemorySearchResult, CollectiveKnowledgeInsight
 from app.models.user import UserIdentity
 
 
-class SaptiState(BaseModel):
+class WorkflowState(BaseModel):
     """State schema for the LangGraph workflow."""
 
     # --- Input ---
@@ -21,24 +21,24 @@ class SaptiState(BaseModel):
     conversation_id: Optional[str] = None
     conversation_history: list[dict] = Field(default_factory=list)
 
-    # --- Perceiver output ---
+    # --- QueryAnalyzer output ---
     intent: Optional[str] = None
     emotion_signal: Optional[str] = None
     search_query: Optional[str] = None
 
-    # --- Rememberer output ---
+    # --- ContextRetriever output ---
     user_identity: Optional[UserIdentity] = None
     personal_memories: list[MemorySearchResult] = Field(default_factory=list)
-    hive_mind_memories: list[HiveMindInsight] = Field(default_factory=list)
+    collective_knowledge: list[CollectiveKnowledgeInsight] = Field(default_factory=list)
 
-    # --- WorldBuilder output ---
+    # --- PromptBuilder output ---
     system_prompt: Optional[str] = None
 
-    # --- Generator output ---
+    # --- ResponseGenerator output ---
     response: Optional[str] = None
     response_chunks: list[str] = Field(default_factory=list)
 
-    # --- Chronicler output ---
+    # --- MemoryExtractor output ---
     new_memory_ids: list[str] = Field(default_factory=list)
 
     # --- Metadata ---

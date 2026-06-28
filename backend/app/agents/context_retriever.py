@@ -1,19 +1,19 @@
 """
-Sapti AI — Horse 2: Rememberer Agent
-Retrieves personal memories and hive mind insights via pgvector.
+Nexus AI — Node 2: ContextRetriever Agent
+Retrieves personal memories and collective knowledge insights via pgvector.
 """
 
 import structlog
-from app.agents.state import SaptiState
+from app.agents.state import WorkflowState
 from app.services.memory_service import MemoryService
 from app.models.user import UserIdentity
 
 logger = structlog.get_logger()
 
 
-async def rememberer_node(state: SaptiState) -> dict:
-    """Horse 2 — Retrieve personal memories, hive mind insights, and user identity."""
-    logger.info("rememberer_start", user_id=state.user_id)
+async def context_retriever_node(state: WorkflowState) -> dict:
+    """Node 2 — Retrieve personal memories, collective knowledge insights, and user identity."""
+    logger.info("context_retriever_start", user_id=state.user_id)
 
     memory_service = MemoryService()
 
@@ -43,20 +43,20 @@ async def rememberer_node(state: SaptiState) -> dict:
                     MemorySearchResult(memory=mem, similarity_score=0.0)
                 )
 
-    # Search hive mind
-    hive_mind_memories = await memory_service.search_hive_mind(
+    # Search collective knowledge
+    collective_knowledge = await memory_service.search_collective_knowledge(
         query=search_query,
     )
 
     logger.info(
-        "rememberer_complete",
+        "context_retriever_complete",
         personal_count=len(personal_memories),
-        hive_count=len(hive_mind_memories),
+        collective_count=len(collective_knowledge),
         has_identity=user_identity is not None,
     )
 
     return {
         "user_identity": user_identity,
         "personal_memories": personal_memories,
-        "hive_mind_memories": hive_mind_memories,
+        "collective_knowledge": collective_knowledge,
     }

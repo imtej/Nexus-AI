@@ -1,5 +1,5 @@
 """
-Sapti AI — User Data Models
+Nexus AI — User Data Models
 """
 
 from pydantic import BaseModel, Field
@@ -14,7 +14,7 @@ class UserProfile(BaseModel):
     avatar_url: Optional[str] = None
     llm_provider: str = "gemini"
     has_api_key: bool = False  # Don't expose actual key
-    hive_mind_opt_in: bool = True
+    collective_knowledge_opt_in: bool = True
     free_chats_remaining: int = 4
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
@@ -25,11 +25,11 @@ class UserProfileUpdate(BaseModel):
     display_name: Optional[str] = None
     avatar_url: Optional[str] = None
     llm_provider: Optional[str] = None
-    hive_mind_opt_in: Optional[bool] = None
+    collective_knowledge_opt_in: Optional[bool] = None
 
 
 class UserIdentity(BaseModel):
-    """Sapti's understanding of a user."""
+    """Nexus AI's understanding of a user."""
     id: Optional[str] = None
     user_id: str
     identity_summary: Optional[str] = None

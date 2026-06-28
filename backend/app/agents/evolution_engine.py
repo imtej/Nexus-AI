@@ -1,6 +1,6 @@
 """
-Sapti AI — Horse 7: Evolver Agent
-Updates Sapti's personality traits based on accumulated interactions (periodic/cron).
+Nexus AI — Node 7: EvolutionEngine Agent
+Updates System's personality traits based on accumulated interactions (periodic/cron).
 """
 
 import structlog
@@ -10,19 +10,19 @@ from app.services.supabase_client import get_supabase_admin
 logger = structlog.get_logger()
 
 
-async def run_evolution_cycle():
+async def run_personality_evolution_cycle():
     """Run a personality evolution cycle. Called periodically."""
-    logger.info("evolver_cycle_start")
+    logger.info("evolution_engine_cycle_start")
 
     db = get_supabase_admin()
 
     try:
         # Get current evolution state
-        evolution_result = db.table("sapti_evolution").select("*").eq("id", 1).single().execute()
+        evolution_result = db.table("system_evolution").select("*").eq("id", 1).single().execute()
 
         if not evolution_result.data:
             # Initialize evolution state
-            db.table("sapti_evolution").insert({
+            db.table("system_evolution").insert({
                 "id": 1,
                 "personality_version": "1.0.0",
                 "total_interactions": 0,
@@ -37,20 +37,20 @@ async def run_evolution_cycle():
         evolution = evolution_result.data
 
         # Count actual interactions and users
-        interaction_count_result = db.table("messages").select("id", count="exact").eq("role", "user").execute()
+        interaction_count_result = db.table("nexus_messages").select("id", count="exact").eq("role", "user").execute()
         total_interactions = interaction_count_result.count or 0
 
-        user_count_result = db.table("profiles").select("id", count="exact").execute()
+        user_count_result = db.table("nexus_profiles").select("id", count="exact").execute()
         total_users = user_count_result.count or 0
 
         # Count memory types for trait calculation
-        emotional_memories = db.table("memory_nodes").select("id", count="exact").eq("memory_type", "emotional_state").execute()
-        factual_memories = db.table("memory_nodes").select("id", count="exact").eq("memory_type", "factual").execute()
-        hive_insights = db.table("hive_mind").select("id", count="exact").execute()
+        emotional_memories = db.table("nexus_memory_nodes").select("id", count="exact").eq("memory_type", "emotional_state").execute()
+        factual_memories = db.table("nexus_memory_nodes").select("id", count="exact").eq("memory_type", "factual").execute()
+        collective_insights = db.table("collective_knowledge").select("id", count="exact").execute()
 
         emotional_count = emotional_memories.count or 0
         factual_count = factual_memories.count or 0
-        hive_count = hive_insights.count or 0
+        hive_count = collective_insights.count or 0
 
         # Calculate evolution traits (0.0 to 1.0, logarithmic growth)
         import math
@@ -87,7 +87,7 @@ async def run_evolution_cycle():
         new_version = f"{major}.{minor}.{patch}"
 
         # Update evolution state
-        db.table("sapti_evolution").update({
+        db.table("system_evolution").update({
             "personality_version": new_version,
             "total_interactions": total_interactions,
             "total_users": total_users,
@@ -100,7 +100,7 @@ async def run_evolution_cycle():
         }).eq("id", 1).execute()
 
         logger.info(
-            "evolver_cycle_complete",
+            "evolution_engine_cycle_complete",
             version=new_version,
             interactions=total_interactions,
             users=total_users,
@@ -110,4 +110,4 @@ async def run_evolution_cycle():
         )
 
     except Exception as e:
-        logger.error("evolver_cycle_error", error=str(e))
+        logger.error("evolution_engine_cycle_error", error=str(e))
