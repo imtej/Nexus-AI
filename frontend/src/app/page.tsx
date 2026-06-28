@@ -175,7 +175,7 @@ export default function LandingPage() {
           <div className={styles.footerColumn}>
             <h4>Project</h4>
             <Link href="/about" className={styles.footerLink}>About Nexus AI</Link>
-            <Link href="https://github.com/imtej/Nexus AI_AI" className={styles.footerLink} target="_blank" rel="noopener noreferrer">GitHub Repository</Link>
+            <Link href="https://github.com/imtej/Nexus-AI" className={styles.footerLink} target="_blank" rel="noopener noreferrer">GitHub Repository</Link>
           </div>
           <div className={styles.footerColumn}>
             <h4>Legal & Transparency</h4>
