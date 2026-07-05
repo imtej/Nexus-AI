@@ -1,0 +1,18 @@
+[
+  {
+    "id": "eval_001",
+    "user_message": "I'm feeling overwhelmed by my data science project deadlines and morning anxiety.",
+    "expected_intent": "venting",
+    "expected_emotion": "anxious",
+    "expected_memory_types": ["emotional_state", "personal_identity"],
+    "target_personality_traits": ["WARMTH", "EMPATHY", "CURIOSITY"]
+  },
+  {
+    "id": "eval_002",
+    "user_message": "Can you remind me what design pattern I preferred for state management?",
+    "expected_intent": "question",
+    "expected_emotion": "neutral",
+    "expected_memory_types": ["preference"],
+    "target_personality_traits": ["MEMORY", "DEPTH"]
+  }
+]

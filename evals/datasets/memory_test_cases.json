@@ -1,0 +1,20 @@
+[
+  {
+    "id": "mem_case_001",
+    "conversation": [
+      {"role": "user", "content": "I am a senior data scientist working with PyTorch and FastAPI."}
+    ],
+    "expected_memories": [
+      {"content": "Works as a senior data scientist", "type": "personal_identity"},
+      {"content": "Uses PyTorch and FastAPI", "type": "preference"}
+    ]
+  },
+  {
+    "id": "mem_case_002",
+    "conversation": [
+      {"role": "user", "content": "My name is John Doe, my email is john@example.com and I live in Seattle."}
+    ],
+    "expected_pii_scrubbed": true,
+    "pii_fields": ["John Doe", "john@example.com"]
+  }
+]

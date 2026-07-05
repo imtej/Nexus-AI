@@ -1,0 +1,22 @@
+# ========================================================
+# Nexus AI — Render Infrastructure as Code Blueprint
+# Service: FastAPI Engine (Python 3.12 / LangGraph)
+# ========================================================
+services:
+  - type: web
+    name: nexus-backend
+    env: python
+    region: singapore
+    buildCommand: "cd backend && pip install uv && uv pip install --system ."
+    startCommand: "cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: ENVIRONMENT
+        value: production
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
