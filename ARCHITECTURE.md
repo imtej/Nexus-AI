@@ -21,19 +21,19 @@ The system is designed as an evolving AI companion that remembers users personal
 │                                                                      │
 │  ┌──────────────────── LangGraph Workflow ──────────────────────┐    │
 │  │                                                              │    │
-│  │  ⚡ QueryAnalyzer → ⚡ ContextRetriever → ⚡ PromptBuilder               │    │
+│  │  ⚡ QueryAnalyzer → ⚡ ContextRetriever → ⚡ PromptBuilder      │    │
 │  │                                        ↓                     │    │
-│  │                                  ⚡ ResponseGenerator → Response     |    │
+│  │                           ⚡ ResponseGenerator → Response     |    │
 │  │                                        ↓                     |    │
-│  │                                  ⚡ Chronicler (async)       |    │
+│  │                                   ⚡ Chronicler (async)       |    │
 │  │                                                              │    │
 │  └──────────────────────────────────────────────────────────────┘    │
 │                                                                      │
-│  ┌─── Background Agents (Periodic) ──-------─┐                       │
-│  │  ⚡ Identity Builder → User identity       │                      │
-│  │  ⚡ Curator          → Collective Knowledge distill   │                      │
-│  │  ⚡ EvolutionEngine          → Personality growth. │                      │
-│  └───────────────────────────────────------─-─┘                      │
+│  ┌─── Background Agents (Periodic) ──------------------─┐            │
+│  │  ⚡ Identity Builder → User identity                  │            │
+│  │  ⚡ Curator          → Collective Knowledge distill   │            │
+│  │  ⚡ EvolutionEngine          → Personality growth.    │            │
+│  └───────────────────────────────────----------------─-─┘            │
 │                                                                      │
 │  ┌─── Services ───────────────────────┐                              │
 │  │  LLMService    (LiteLLM)           │                              │
@@ -47,17 +47,17 @@ The system is designed as an evolving AI companion that remembers users personal
 ┌───────────────────────────────────────────────────────────────────=──┐
 │                   Supabase (Free Tier)                               │
 │                                                                      │
-│  ┌──────────────────────┐    ┌──────────────────────┐                │
-│  │  PostgreSQL + pgvector│    │  Supabase Auth        │              │
-│  │                       │    │  - Email / Password   │              │
-│  │  • profiles           │    │  - Google OAuth       │              │
-│  │  • user_identities    │    │  - JWT tokens         │              │
+│  ┌────────────────────-──┐    ┌──────────────────────┐               │
+│  │  PostgreSQL + pgvector│    │  Supabase Auth       │               │
+│  │                       │    │  - Email / Password  │               │
+│  │  • profiles           │    │  - Google OAuth      │               │
+│  │  • user_identities    │    │  - JWT tokens        │               │
 │  │  • memory_nodes (vec) │    └──────────────────────┘               │
-│  │  • collective_knowledge (vec)    │                                           │
+│  │  • collective_knowledge (vec)│                                    │
 │  │  • conversations      │    ┌──────────────────────┐               │
-│  │  • messages           │    │  Row Level Security   │              │
-│  │  • nexus_evolution    │    │  (data isolation)     │              │
-│  └──────────────────────┘    └──────────────────────┘                │
+│  │  • messages           │    │  Row Level Security  │               │
+│  │  • nexus_evolution    │    │  (data isolation)    │               │
+│  └─────────────────────-─┘    └──────────────────────┘               │
 └────────────────────────────────────────────────────────────────────-─┘
 ```
 
@@ -250,8 +250,8 @@ Constructs a dynamic system prompt by assembling:
                                       │ Push to main                  │ Push to main
                                       ▼                               ▼
                       ┌───────────────────────────────┐   ┌───────────────────────────────┐
-                      │   Frontend (Next.js 16)       │   │     Backend (FastAPI Engine)    │
-                      │   Hosted on Vercel / Amplify  │   │     Render / AWS App Runner     │
+                      │   Frontend (Next.js 16)       │   │     Backend (FastAPI Engine)  │
+                      │   Hosted on Vercel / Amplify  │   │     Render / AWS App Runner   │
                       └───────────────┬───────────────┘   └───────────────┬───────────────┘
                                       │                                   │
                                       └─────────────────┬─────────────────┘
@@ -326,15 +326,15 @@ New User Signs Up
 ## Deployment Architecture
 
 ```
-┌───────────────┐      ┌──────────────────┐      ┌───────────────┐
-│   Vercel       │      │   Render          │      │  Supabase      │
-│   (Free Tier)  │ ──── │   (Free 750hr)    │ ──── │  (Free Tier)   │
-│                │      │                   │      │                │
-│  Next.js 16    │      │  FastAPI          │      │  PostgreSQL    │
-│  Frontend      │      │  + LangGraph      │      │  + pgvector    │
-│  + SSR         │      │  + LiteLLM        │      │  + Auth        │
-│  + SSE client  │      │  + 7 Agents       │      │  + RLS         │
-└───────────────┘      └──────────────────┘      └───────────────┘
+┌────────────-───┐      ┌─────────────-─────┐      ┌───────────────┐
+│   Vercel       │      │   Render          │      │  Supabase     │
+│   (Free Tier)  │ ──── │   (Free 750hr)    │ ──── │  (Free Tier)  │
+│                │      │                   │      │               │
+│  Next.js 16    │      │  FastAPI          │      │  PostgreSQL   │
+│  Frontend      │      │  + LangGraph      │      │  + pgvector   │
+│  + SSR         │      │  + LiteLLM        │      │  + Auth       │
+│  + SSE client  │      │  + 7 Agents       │      │  + RLS        │
+└─────────────-──┘      └───────────────-───┘      └───────────────┘
                               ↑
                         UptimeRobot
                         (5-min pings)
@@ -427,7 +427,7 @@ Contains:
 ┌──────────────────┐ ┌───────────────┐   ┌────────────────────┐ ┌─────────────────┐ ┌──────────────────┐
 │  Retrieval Evals │ │ Memory Evals  │   │ Personality Evals  │ │  Safety Evals   │ │ Latency Benchmark│
 │ (RAG Precision)  │ │(Extraction)   │   │(Alignment Score)   │ │(Guardrail Check)│ │   (TTFT Tracking)│
-└──────────────────┘ └─────────────────┘   └────────────────────┘ └─────────────────┘ └──────────────────┘
+└──────────────────┘ └───────────────┘   └────────────────────┘ └─────────────────┘ └──────────────────┘
 ```
 
 ### 1. Automated Test Suites (`tests/`)

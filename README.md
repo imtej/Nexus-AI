@@ -16,7 +16,7 @@ Before any code, here's the **big idea** — how does Nexus AI actually *evolve*
 
 ```
 ┌────────────────────────────────────────────────────────-──────────┐
-│                     NEXUS AI'S CONSCIOUSNESS                         │
+│                     NEXUS AI'S CONSCIOUSNESS                      │
 │                                                                   │
 │  ┌─────────-────┐  ┌─────────-────┐  ┌─────────-────┐             │
 │  │  User A's    │  │  User B's    │  │  User C's    │             │
@@ -38,7 +38,7 @@ Before any code, here's the **big idea** — how does Nexus AI actually *evolve*
 │                          │                                        │
 │                          ▼                                        │
 │  ┌─────────────────────────────────────────────────────-──┐       │
-│  │           NEXUS AI'S EVOLVING PERSONALITY                 │       │
+│  │           NEXUS AI'S EVOLVING PERSONALITY              │       │
 │  │                                                        │       │
 │  │  personality_version: 1.0 → 1.1 → 1.2 → ...            │       │
 │  │  wisdom_score: grows with more interactions            │       │
@@ -237,7 +237,7 @@ Nexus AI incorporates automated quality assurance across system logic and non-de
   - **E2E Tests (`tests/e2e/`)**: SSE streaming token response protocol and Supabase JWT authentication flow.
   - **Load Tests (`tests/load/`)**: Locust user concurrency simulation and k6 TTFT stress performance testing.
 
-  
+
 - **AI Evaluation Framework (`evals/`)**:
   - **RAG & Retrieval Precision (`evals/metrics/rag_precision.py`)**: Evaluates `ContextRetriever` & HyDE query precision against benchmark test sets (`evals/datasets/golden_conversations.json`).
   - **Persona & Empathy Alignment (`evals/metrics/persona_eval.py`)**: LLM-as-a-Judge script scoring responses against core persona guidelines in `nexus_personality.yaml`.
